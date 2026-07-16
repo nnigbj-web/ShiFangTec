@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吃什么吃 — 用一屏极简对话流，重构10亿人的每日膳食决策</title>
+    <meta name="description" content="吃什么吃是对话式食物AI智能体。一屏极简对话流，拍照即答案——餐盘快判·新鲜度检测·等热量对比·一周饮食图谱。基础功能永久免费。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+        :root {
+            --brand: #00A86B;
+            --brand-dark: #008f5a;
+            --brand-light: #e6f7f0;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            color: #1A1A1A;
+            background: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        .text-brand { color: var(--brand); }
+        .bg-brand { background-color: var(--brand); }
+        .border-brand { border-color: var(--brand); }
+
+        /* Hero gradient */
+        .hero-gradient {
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, #e6f7f0 0%, #f0faf5 30%, #FFFFFF 70%);
+        }
+
+        /* Glass card */
+        .glass-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,168,107,0.1);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,168,107,0.1);
+        }
+
+        /* Phone frame */
+        .phone-frame {
+            background: #1A1A2E;
+            border-radius: 44px;
+            padding: 14px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
+            position: relative;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 28px;
+            background: #1A1A2E;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+        .phone-screen {
+            background: #F5F5F5;
+            border-radius: 32px;
+            overflow: hidden;
+        }
+
+        /* Chat bubbles */
+        .bubble-ai {
+            background: #F0F2F5;
+            border-radius: 16px 16px 16px 4px;
+        }
+        .bubble-user {
+            background: var(--brand);
+            color: white;
+            border-radius: 16px 16px 4px 16px;
+        }
+
+        /* Animated gradient border */
+        .gradient-border {
+            position: relative;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--brand), #4ECDC4, #FFE66D, var(--brand));
+            background-size: 300% 300%;
+            animation: borderGlow 4s ease infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .gradient-border:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Float animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        .float-anim {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* Fade in up */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Skill icon glow */
+        .skill-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.3s;
+        }
+        .glass-card:hover .skill-icon {
+            transform: scale(1.08);
+        }
+
+        /* CTA button pulse */
+        .cta-pulse {
+            animation: ctaPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes ctaPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0,168,107,0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(0,168,107,0); }
+        }
+
+        /* Stats counter */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+
+        /* Nav scroll effect */
+        .nav-scrolled {
+            background: rgba(255,255,255,0.92) !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.06) !important;
+        }
+
+        /* Download badge */
+        .download-badge {
+            transition: all 0.3s;
+        }
+        .download-badge:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        /* Responsive phone size */
+        @media (max-width: 768px) {
+            .phone-frame { max-width: 280px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== NAVIGATION ==================== -->
+<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-4">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-2.5">
+            <span class="w-9 h-9 bg-brand rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-emerald-500/20">🥗</span>
+            <span class="font-bold text-lg tracking-tight text-gray-900">吃什么吃</span>
+        </a>
+        <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-600">
+            <a href="#features" class="hover:text-brand transition">功能特色</a>
+            <a href="#how-it-works" class="hover:text-brand transition">如何使用</a>
+            <a href="#skills" class="hover:text-brand transition">核心Skill</a>
+            <a href="#download" class="hover:text-brand transition">下载</a>
+        </div>
+        <a href="#download" class="bg-brand text-white text-sm px-5 py-2.5 rounded-full font-semibold hover:bg-[#008f5a] transition shadow-md shadow-emerald-500/20">
+            免费下载
+        </a>
+    </div>
+</nav>
+
+<!-- ==================== HERO SECTION ==================== -->
+<section class="hero-gradient pt-32 pb-20 lg:pt-40 lg:pb-28">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+            <!-- Left: Copy -->
+            <div class="lg:col-span-7 space-y-8">
+                <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur px-4 py-2 rounded-full border border-emerald-100 shadow-sm">
+                    <span class="w-2 h-2 bg-brand rounded-full animate-pulse"></span>
+                    <span class="text-xs font-semibold text-emerald-800">基础功能永久免费</span>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-gray-900">
+                    用一屏极简对话流<br>
+                    <span class="text-brand">重构 10 亿人</span>的每日膳食决策
+                </h1>
+
+                <p class="text-lg text-gray-500 leading-relaxed max-w-lg">
+                    对话式食物AI智能体。不需要手动记录、不需要学营养学、不需要翻菜谱——
+                    拍照、对话、拿答案。像和朋友聊天一样管理饮食健康。
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <a href="#download" class="bg-brand text-white px-8 py-4 rounded-full font-bold text-sm hover:bg-[#008f5a] transition cta-pulse shadow-xl shadow-emerald-500/25">
+                        📲 免费下载 App
+                    </a>
+                    <a href="#features" class="border-2 border-gray-200 text-gray-700 px-8 py-4 rounded-full font-bold text-sm hover:border-brand hover:text-brand transition">
+                        了解功能 ↓
+                    </a>
+                </div>
+
+                <!-- Trust indicators -->
+                <div class="flex flex-wrap items-center gap-6 pt-4 text-sm text-gray-400">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-yellow-400 text-base">★★★★★</span>
+                        <span class="font-semibold text-gray-600">4.9</span>
+                        <span>评分</span>
+                    </div>
+                    <div class="w-px h-4 bg-gray-200"></div>
+                    <div>
+                        <span class="font-semibold text-gray-600">10万+</span> 日活用户
+                    </div>
+                    <div class="w-px h-4 bg-gray-200"></div>
+                    <div>
+                        <span class="font-semibold text-gray-600">1000万+</span> 餐食分析
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Phone Mockup -->
+            <div class="lg:col-span-5 flex justify-center">
+                <div class="phone-frame w-[280px] h-[560px] md:w-[300px] md:h-[600px] float-anim">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen w-full h-full flex flex-col justify-between p-4 relative">
+                        <!-- Status bar -->
+                        <div class="flex justify-between items-center text-[10px] text-gray-400 pt-2 pb-1">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <!-- Header -->
+                        <div class="flex justify-between items-center pb-2 border-b border-gray-200 mt-1">
+                            <span class="font-bold text-xs">👤 我的</span>
+                            <span class="font-bold text-sm text-emerald-700">吃什么吃</span>
+                            <span class="text-gray-400 text-xs">···</span>
+                        </div>
+                        <!-- Chat area -->
+                        <div class="flex-1 space-y-3 py-3 overflow-hidden text-xs">
+                            <!-- AI message -->
+                            <div class="bubble-ai p-2.5 max-w-[85%] text-[11px]">
+                                下午好 ☀️ 你上次拍的那袋菠菜——今天做了吗？
+                            </div>
+                            <!-- User message -->
+                            <div class="bubble-user p-2.5 max-w-[80%] ml-auto text-[11px] shadow-sm">
+                                📷 [拍了一盘中餐]
+                            </div>
+                            <!-- Analysis card -->
+                            <div class="bg-white rounded-xl p-3 shadow-sm border border-emerald-100 space-y-1.5">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-emerald-700 text-[11px]">📊 75分 · 餐盘快判</span>
+                                    <span class="text-[9px] bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-full font-bold">秒级分析</span>
+                                </div>
+                                <p class="text-[10px] text-gray-500">红烧肉 · 番茄炒蛋 · 米饭</p>
+                                <div class="flex gap-1 text-[9px]">
+                                    <span class="bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">🔥 680 kcal</span>
+                                    <span class="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded">🥩 蛋白32g</span>
+                                </div>
+                                <div class="bg-amber-50 text-[10px] text-amber-800 p-1.5 rounded-lg">
+                                    💡 缺一份蔬菜，加清炒时蔬就85分
+                                </div>
+                            </div>
+                            <!-- Quick action -->
+                            <div class="flex gap-2 text-[10px] overflow-x-auto">
+                                <span class="bg-gray-100 px-2 py-1 rounded-full shrink-0">🔄 等热量对比</span>
+                                <span class="bg-gray-100 px-2 py-1 rounded-full shrink-0">🩸 血糖负荷</span>
+                            </div>
+                        </div>
+                        <!-- Input bar -->
+                        <div class="flex gap-2 items-center pt-2 border-t border-gray-200">
+                            <span class="w-8 h-8 bg-brand rounded-full flex items-center justify-center text-white text-xs shrink-0">📷</span>
+                            <div class="flex-1 bg-gray-100 rounded-full py-1.5 px-3 text-[10px] text-gray-400">
+                                问我：这个还能吃吗...
+                            </div>
+                            <span class="text-brand font-bold">➤</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ==================== FEATURES SECTION ==================== -->
+<section id="features" class="py-20 lg:py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+            <span class="text-xs font-bold text-brand tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded-full">WHY 吃什么吃</span>
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mt-4 mb-4">
+                不是又一个记录工具<br>
+                <span class="text-brand">是你厨房里的AI大脑</span>
+            </h2>
+            <p class="text-gray-500 mx-auto">
+                传统App让你手动打卡——吃什么吃让你拍照就行。打开、拍摄、答案——3秒完成。
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <!-- Feature 1 -->
+            <div class="glass-card rounded-2xl p-8 reveal">
+                <div class="skill-icon bg-emerald-100 text-brand mb-5">📸</div>
+                <h3 class="text-lg font-bold mb-2">拍照即输入</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    对准食物按快门，2秒出分析结果。彻底消灭"搜索菜名→选克数→手动加总"的120秒繁琐流程。
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="glass-card rounded-2xl p-8 reveal">
+                <div class="skill-icon bg-blue-100 text-blue-600 mb-5">💬</div>
+                <h3 class="text-lg font-bold mb-2">一个窗口·无限能力</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    没有Tab、没有菜单、没有功能页面。对话流是唯一界面——所有能力通过自然对话触发。
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="glass-card rounded-2xl p-8 reveal">
+                <div class="skill-icon bg-purple-100 text-purple-600 mb-5">🧠</div>
+                <h3 class="text-lg font-bold mb-2">长记忆·更懂你</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    记住三天前拍过的菠菜、你的草莓成熟度偏好、这周缺了几次蔬菜——越用越懂你的AI。
+                </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="glass-card rounded-2xl p-8 reveal">
+                <div class="skill-icon bg-amber-100 text-amber-600 mb-5">🔬</div>
+                <h3 class="text-lg font-bold mb-2">多光谱精准数据</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    基于食方SFOOD 3000+子类食物数据库，中国食物成分表权威映射，杜绝AI瞎编卡路里。
+                </p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="glass-card rounded-2xl p-8 reveal">
+                <div class="skill-icon bg-red-100 text-red-500 mb-5">🛡️</div>
+                <h3 class="text-lg font-bold mb-2">科学立场·不为广告妥协</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    不接食品品牌广告、不做付费排名。AI建议基于科学数据，不是商业利益——用户信任是一切的基础。
+                </p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="glass-card rounded-2xl p-8 reveal">
+                <div class="skill-icon bg-teal-100 text-teal-600 mb-5">🥬</div>
+                <h3 class="text-lg font-bold mb-2">还能不能吃·拍了就知道</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    拍一拍冰箱里放了几天不知道还能不能吃的食材——AI告诉你新鲜度、剩几天、怎么消耗最不浪费。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section id="how-it-works" class="py-20 lg:py-28 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+            <span class="text-xs font-bold text-brand tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded-full">HOW IT WORKS</span>
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mt-4 mb-4">
+                打开 · 拍照 · 拿答案<br>
+                <span class="text-brand">3秒，就够了</span>
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Step 1 -->
+            <div class="text-center reveal">
+                <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg shadow-gray-100 border border-gray-100">
+                    📷
+                </div>
+                <div class="bg-brand text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">Step 1</div>
+                <h3 class="text-xl font-bold mb-2">拍一张照片</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    拍餐盘、拍食材、拍零食、拍冰箱——任何与食物相关的照片，AI都能理解。
+                </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="text-center reveal">
+                <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg shadow-gray-100 border border-gray-100">
+                    ⚡
+                </div>
+                <div class="bg-brand text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">Step 2</div>
+                <h3 class="text-xl font-bold mb-2">AI秒级分析</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    视觉识别拆解食物→权威数据库精准映射→LLM生成有温度的洞察。不是冷冰冰的数字。
+                </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="text-center reveal">
+                <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 shadow-lg shadow-gray-100 border border-gray-100">
+                    🎯
+                </div>
+                <div class="bg-brand text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">Step 3</div>
+                <h3 class="text-xl font-bold mb-2">拿到行动方案</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    不只是"多少热量"——而是"75分·缺蔬菜·加一份就85分"这样的成品行动指南。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 6 CORE SKILLS ==================== -->
+<section id="skills" class="py-20 lg:py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+            <span class="text-xs font-bold text-brand tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded-full">6 CORE SKILLS</span>
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mt-4 mb-4">
+                6个核心能力，覆盖<br>
+                <span class="text-brand">你面对食物的每一种不确定性</span>
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Skill 1 -->
+            <div class="group bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-6 border border-emerald-100 hover:shadow-xl hover:shadow-emerald-100/30 transition-all duration-300 reveal">
+                <div class="flex items-start gap-4">
+                    <span class="text-3xl">📊</span>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-1">餐盘快判</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">拍餐食→2秒→75分+热量条+"就一件事"行动建议。从"我吃得好不好"到"我该怎么补"。一键解决。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill 2 -->
+            <div class="group bg-gradient-to-br from-amber-50 to-white rounded-2xl p-6 border border-amber-100 hover:shadow-xl hover:shadow-amber-100/30 transition-all duration-300 reveal">
+                <div class="flex items-start gap-4">
+                    <span class="text-3xl">🥬</span>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-1">还能不能吃</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">拍单个食材→新鲜度百分比→"42%·今天必须吃·蒜蓉炒最搭"。附带储存建议+保鲜技巧。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill 3 -->
+            <div class="group bg-gradient-to-br from-purple-50 to-white rounded-2xl p-6 border border-purple-100 hover:shadow-xl hover:shadow-purple-100/30 transition-all duration-300 reveal">
+                <div class="flex items-start gap-4">
+                    <span class="text-3xl">🔄</span>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-1">热量等价交换器</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">拍零食→"610kcal瓜子=一份牛排套餐"→AI合成对比图。天然朋友圈素材，最强传播引擎。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill 4 -->
+            <div class="group bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border border-blue-100 hover:shadow-xl hover:shadow-blue-100/30 transition-all duration-300 reveal">
+                <div class="flex items-start gap-4">
+                    <span class="text-3xl">🍽️</span>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-1">今天吃什么</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">基于冰箱库存+健康目标→三餐方案+采购补单。"家里没有西兰花"→AI推荐3种替代品。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill 5 -->
+            <div class="group bg-gradient-to-br from-rose-50 to-white rounded-2xl p-6 border border-rose-100 hover:shadow-xl hover:shadow-rose-100/30 transition-all duration-300 reveal">
+                <div class="flex items-start gap-4">
+                    <span class="text-3xl">🛒</span>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-1">买菜参谋</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">拍两盒草莓→左右对比→"右盒更适合你周三的节奏"。可追问"怎么看出来"→AI展开挑货教学。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill 6 -->
+            <div class="group bg-gradient-to-br from-teal-50 to-white rounded-2xl p-6 border border-teal-100 hover:shadow-xl hover:shadow-teal-100/30 transition-all duration-300 reveal">
+                <div class="flex items-start gap-4">
+                    <span class="text-3xl">📅</span>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-1">一周饮食图谱</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">拍采购成果合影→10种食材→7天三餐日历+营养覆盖检查→缺项补购清单。可分享"我家下周吃什么"。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== COMPARISON TABLE (HIDDEN) ==================== -->
+
+<!-- ==================== DATA FLYWHEEL ==================== -->
+<section class="py-20 lg:py-28 bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-6 space-y-6 reveal">
+                <span class="text-xs font-bold text-brand tracking-widest uppercase bg-emerald-900/50 px-3 py-1 rounded-full inline-block">DATA FLYWHEEL</span>
+                <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight">
+                    每一次拍照<br>
+                    <span class="text-brand">都在让AI变得更聪明</span>
+                </h2>
+                <p class="text-gray-400 leading-relaxed">
+                    吃什么吃是食方C端数据引擎。千万用户每一次拍照，都在为全球最大规模的真实场景食物多模态数据库贡献训练数据——这形成了一道任何竞品都无法复制的数据护城河。
+                </p>
+                <div class="grid grid-cols-3 gap-4 pt-4">
+                    <div class="text-center p-4 bg-gray-800 rounded-xl">
+                        <div class="text-2xl font-extrabold text-brand">1000万+</div>
+                        <div class="text-xs text-gray-400 mt-1">日新增训练数据</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-xl">
+                        <div class="text-2xl font-extrabold text-brand">3000+</div>
+                        <div class="text-xs text-gray-400 mt-1">中式食物子类</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-800 rounded-xl">
+                        <div class="text-2xl font-extrabold text-brand">92%+</div>
+                        <div class="text-xs text-gray-400 mt-1">菜品识别准确率</div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-6 reveal">
+                <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+                    <div class="space-y-4 text-xs font-mono">
+                        <div class="flex items-center gap-3">
+                            <span class="text-brand text-lg">📱</span>
+                            <span class="text-gray-300">C端用户拍照</span>
+                            <span class="text-gray-500">→</span>
+                            <span class="text-brand font-bold">每次拍照 = 一条训练数据</span>
+                        </div>
+                        <div class="w-full h-px bg-gray-700"></div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brand text-lg">🗄️</span>
+                            <span class="text-gray-300">食方食物多模态数据库</span>
+                        </div>
+                        <div class="w-full h-px bg-gray-700"></div>
+                        <div class="grid grid-cols-3 gap-2 text-[10px] text-gray-400">
+                            <div class="bg-gray-700/50 p-2 rounded-lg text-center">品类识别标注</div>
+                            <div class="bg-gray-700/50 p-2 rounded-lg text-center">份量估算真值</div>
+                            <div class="bg-gray-700/50 p-2 rounded-lg text-center">新鲜度时间映射</div>
+                            <div class="bg-gray-700/50 p-2 rounded-lg text-center">用户偏好模式</div>
+                            <div class="bg-gray-700/50 p-2 rounded-lg text-center">菜品营养关联</div>
+                            <div class="bg-gray-700/50 p-2 rounded-lg text-center">GL血糖数据</div>
+                        </div>
+                        <div class="w-full h-px bg-gray-700"></div>
+                        <div class="grid grid-cols-3 gap-2 text-[10px] text-center">
+                            <div class="bg-emerald-900/50 p-2 rounded-lg">
+                                <span class="text-brand font-bold block">膳养大模型</span>
+                                <span class="text-gray-400">持续进化</span>
+                            </div>
+                            <div class="bg-emerald-900/50 p-2 rounded-lg">
+                                <span class="text-brand font-bold block">B端产品</span>
+                                <span class="text-gray-400">更精准</span>
+                            </div>
+                            <div class="bg-emerald-900/50 p-2 rounded-lg">
+                                <span class="text-brand font-bold block">C端硬件</span>
+                                <span class="text-gray-400">AI冰箱/秤/烤箱</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== EVOLUTION ROADMAP ==================== -->
+<section class="py-20 lg:py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+            <span class="text-xs font-bold text-brand tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded-full">ROADMAP</span>
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mt-4 mb-4">
+                从工具到生态<br>
+                <span class="text-brand">三步走向居家食物健康智能体</span>
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- V1.0 -->
+            <div class="relative bg-white rounded-2xl p-8 border border-emerald-200 shadow-lg reveal">
+                <div class="absolute -top-3 -right-3 bg-brand text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">NOW</div>
+                <span class="text-brand font-extrabold text-5xl opacity-20">01</span>
+                <h3 class="text-xl font-bold mt-2 mb-1">V1.0 · 极致工具化</h3>
+                <p class="text-xs text-brand font-semibold mb-4">拍照即输入 · 免费蓄水</p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li>✅ 6大核心Skill全部免费</li>
+                    <li>✅ 7个结果型视角切换</li>
+                    <li>✅ AI等热量对比图生成</li>
+                    <li>✅ 长记忆对话与主动提醒</li>
+                </ul>
+            </div>
+
+            <!-- V2.0 -->
+            <div class="relative bg-white rounded-2xl p-8 border border-amber-200 shadow-lg reveal">
+                <span class="text-amber-400 font-extrabold text-5xl opacity-20">02</span>
+                <h3 class="text-xl font-bold mt-2 mb-1">V2.0 · 深度粘性</h3>
+                <p class="text-xs text-amber-600 font-semibold mb-4">多视角记忆 · 情感伴走</p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li>✅ GL血糖连续追踪</li>
+                    <li>✅ AI虚拟营养师伴走</li>
+                    <li>✅ 家庭多成员营养看板</li>
+                    <li>✅ 深度Skill订阅上线</li>
+                </ul>
+            </div>
+
+            <!-- V3.0 -->
+            <div class="relative bg-white rounded-2xl p-8 border border-blue-200 shadow-lg reveal">
+                <span class="text-blue-400 font-extrabold text-5xl opacity-20">03</span>
+                <h3 class="text-xl font-bold mt-2 mb-1">V3.0 · 智慧厨房生态</h3>
+                <p class="text-xs text-blue-600 font-semibold mb-4">AI冰箱 · 智能秤 · AI烤箱</p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li>✅ 智慧厨房设备全打通</li>
+                    <li>✅ 自有健康商城上线</li>
+                    <li>✅ 居家食物健康智能体</li>
+                    <li>✅ 硬件+商城+订阅三引擎</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== DOWNLOAD CTA ==================== -->
+<section id="download" class="py-20 lg:py-28 bg-gradient-to-br from-emerald-600 to-emerald-800 text-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="reveal space-y-8">
+            <span class="text-xs font-bold tracking-widest uppercase bg-white/20 px-3 py-1 rounded-full">DOWNLOAD</span>
+            <h2 class="text-3xl lg:text-5xl font-extrabold leading-tight">
+                拍照即答案<br>
+                <span class="text-emerald-200">今天就试试看</span>
+            </h2>
+            <p class="text-lg text-emerald-100 max-w-lg mx-auto">
+                打开App，拍一张你的午餐。3秒后，你会看到一个全新的饮食管理方式——不用学、不用记、不用填。
+            </p>
+
+            <!-- Download badges -->
+            <div class="flex flex-wrap justify-center gap-6 pt-4">
+                <a href="#" class="download-badge bg-black text-white px-8 py-4 rounded-2xl flex items-center gap-3 shadow-2xl">
+                    <span class="text-3xl">🍎</span>
+                    <div class="text-left">
+                        <div class="text-[10px] text-gray-400">Download on the</div>
+                        <div class="font-semibold text-lg">App Store</div>
+                    </div>
+                </a>
+                <a href="#" class="download-badge bg-black text-white px-8 py-4 rounded-2xl flex items-center gap-3 shadow-2xl">
+                    <span class="text-3xl">🤖</span>
+                    <div class="text-left">
+                        <div class="text-[10px] text-gray-400">GET IT ON</div>
+                        <div class="font-semibold text-lg">Google Play</div>
+                    </div>
+                </a>
+            </div>
+
+            <p class="text-sm text-emerald-200 pt-4">
+                支持 iOS 16+ · Android 12+ · 完全免费下载
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="py-16 bg-gray-900 text-gray-400">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <!-- Brand -->
+            <div class="md:col-span-2 space-y-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-9 h-9 bg-brand rounded-xl flex items-center justify-center text-white text-lg font-bold">🥗</span>
+                    <span class="font-bold text-lg text-white">吃什么吃</span>
+                </div>
+                <p class="text-xs text-gray-500">食方科技旗下AI产品</p>
+                <p class="text-sm leading-relaxed max-w-xs mt-2">
+                    对话式食物AI智能体。拍照即答案——不是记录工具，是你厨房里的AI大脑。
+                </p>
+                <p class="text-xs text-gray-600">© 2026 食方科技 · 保留所有权利</p>
+            </div>
+
+            <!-- Links -->
+            <div>
+                <h4 class="font-semibold text-white mb-4">产品</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#features" class="hover:text-brand transition">功能特色</a></li>
+                    <li><a href="#skills" class="hover:text-brand transition">核心Skill</a></li>
+                    <li><a href="#download" class="hover:text-brand transition">下载App</a></li>
+                    <li><a href="#" class="hover:text-brand transition">更新日志</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold text-white mb-4">公司</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-brand transition">关于食方科技</a></li>
+                    <li><a href="#" class="hover:text-brand transition">隐私政策</a></li>
+                    <li><a href="#" class="hover:text-brand transition">用户协议</a></li>
+                    <li><a href="#" class="hover:text-brand transition">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-600">
+            吃什么吃 · 食方科技产品团队 · 基于食方多模态食物大模型驱动
+        </div>
+    </div>
+</footer>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('nav-scrolled');
+        } else {
+            navbar.classList.remove('nav-scrolled');
+        }
+    });
+
+    // Scroll reveal animation
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Stagger the reveals
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, Array.from(entry.target.parentNode?.children || []).indexOf(entry.target) * 80);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Smooth scroll for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Counter animation for stats
+    function animateCounters() {
+        document.querySelectorAll('[data-count]').forEach(el => {
+            const target = parseInt(el.getAttribute('data-count'));
+            const duration = 2000;
+            const start = performance.now();
+
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                // Ease out cubic
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(eased * target);
+                el.textContent = current.toLocaleString() + '+';
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            requestAnimationFrame(update);
+        });
+    }
+
+    // Trigger counter animation when stats section comes into view
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('[data-count]')?.closest('section');
+    if (statsSection) statsObserver.observe(statsSection);
+
+    console.log('🥗 吃什么吃 — 用一屏极简对话流，重构10亿人的每日膳食决策');
+    console.log('📸 拍照即答案 · 基础功能永久免费');
+    console.log('🔗 官网: https://吃什么吃.app');
+</script>
+
+</body>
+</html>
