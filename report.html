@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>“吃什么吃” V1.0 战略规划与竞品深度分析报告</title>
-    <!-- 引入 Tailwind CSS 进行极简且高级的排版 -->
+    <title>"吃什么吃" V1.0 战略规划与竞品深度分析报告</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Chart.js 用于商业与技术矩阵的可视化 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;700&display=swap');
-        
+
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             background-color: #F8F9FA;
@@ -18,26 +16,22 @@
             scroll-behavior: smooth;
         }
 
-        /* 品牌翡翠绿主色调相关样式 */
         .text-brand { color: #00A86B; }
         .bg-brand { background-color: #00A86B; }
         .border-brand { border-color: #00A86B; }
         .hover-bg-brand:hover { background-color: #008f5a; }
 
-        /* 卡片物理投影与悬停动态，符合 Layer 系统规范 */
         .glass-card {
             background: #FFFFFF;
             border: 1px solid rgba(0, 168, 107, 0.1);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .glass-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 30px rgba(0, 168, 107, 0.08);
         }
 
-        /* 模拟 App 对话气泡样式（完全匹配V1.0设计总纲） */
         .bubble-ai {
             background-color: #F0F2F5;
             border-radius: 16px 16px 16px 4px;
@@ -48,19 +42,10 @@
             border-radius: 16px 16px 4px 16px;
         }
 
-        /* 滚动条美化 */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #00A86B;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F1F1F1;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #00A86B; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #F1F1F1; }
 
-        /* 跳动圆点思考动效 */
         @keyframes bounce-delay {
             0%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-6px); }
@@ -75,11 +60,46 @@
         }
         .bounce-dot-1 { animation-delay: -0.32s; }
         .bounce-dot-2 { animation-delay: -0.16s; }
+
+        /* Risk matrix */
+        .risk-critical { background: #FEF2F2; border-left: 4px solid #EF4444; }
+        .risk-high { background: #FFF7ED; border-left: 4px solid #F97316; }
+        .risk-medium { background: #FEFCE8; border-left: 4px solid #EAB308; }
+        .risk-low { background: #F0FDF4; border-left: 4px solid #22C55E; }
+
+        /* Moat card */
+        .moat-card {
+            border-left: 3px solid #00A86B;
+            transition: all 0.3s;
+        }
+        .moat-card:hover {
+            border-left-width: 5px;
+            background: #f9fefb;
+        }
+
+        /* Three-layer model */
+        .layer-revenue {
+            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+            border: 2px solid #3B82F6;
+        }
+        .layer-subscription {
+            background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+            border: 2px solid #22C55E;
+        }
+        .layer-data {
+            background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+            border: 2px solid #F59E0B;
+        }
+
+        /* Competition matrix */
+        .threat-critical { background-color: #FEE2E2; color: #991B1B; }
+        .threat-high { background-color: #FEF3C7; color: #92400E; }
+        .threat-medium { background-color: #DBEAFE; color: #1E40AF; }
+        .threat-low { background-color: #F0FDF4; color: #166534; }
     </style>
 </head>
 <body class="min-h-screen relative pb-12">
 
-<!-- Toast 消息通知系统容器 (严格禁止使用原生alert) -->
 <div id="toast-container" class="fixed top-20 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
 <!-- 顶栏导航 -->
@@ -89,19 +109,24 @@
             <span class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white text-lg font-bold">📢</span>
             <div>
                 <span class="font-bold text-lg tracking-tight">吃什么吃 V1.0</span>
-                <span class="text-xs text-gray-500 block">对话式食物AI智能体</span>
+                <span class="text-xs text-gray-500 block">对话式食物AI智能体 · 战略白皮书</span>
             </div>
         </div>
-        <div class="hidden lg:flex gap-8 text-sm font-medium">
+        <div class="hidden lg:flex gap-6 text-xs font-medium">
             <a href="#positioning" class="hover:text-brand transition">战略定位</a>
             <a href="#user-value" class="hover:text-brand transition">用户价值</a>
-            <a href="#competitors" class="hover:text-brand transition">全球博弈</a>
-            <a href="#business" class="hover:text-brand transition">变现矩阵</a>
-            <a href="#feasilibility" class="hover:text-brand transition">解耦架构</a>
+            <a href="#competitors" class="hover:text-brand transition">竞品分析</a>
+            <a href="#deep-competition" class="hover:text-brand transition">竞争格局</a>
+            <a href="#business" class="hover:text-brand transition">商业模式</a>
+            <a href="#moat" class="hover:text-brand transition">护城河</a>
+            <a href="#risks" class="hover:text-brand transition">风险</a>
+            <a href="#feasilibility" class="hover:text-brand transition">技术架构</a>
+            <a href="#interface" class="hover:text-brand transition">界面架构</a>
             <a href="#evolution" class="hover:text-brand transition">演进路线</a>
+            <a href="#metrics" class="hover:text-brand transition">核心指标</a>
         </div>
         <a href="#app-demo" class="bg-brand text-white text-xs px-4 py-2 rounded-full font-bold hover-bg-brand transition shadow-sm">
-            调试 V1.0 原型沙盒
+            交互沙盒
         </a>
     </div>
 </nav>
@@ -111,42 +136,39 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div class="lg:col-span-7">
             <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                对话即界面 · 拍照即输入 · 彻底消灭复杂交互
+                对话即界面 · 拍照即输入 · AI Native 饮食决策入口
             </span>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mt-4 text-gray-900">
                 用一屏极简对话流<br>
                 <span class="text-brand">重构 10 亿人</span>的每日膳食决策
             </h1>
             <p class="text-lg text-gray-600 mt-6 leading-relaxed">
-                本报告严格基于《"吃什么吃" AI智能体 · 产品方案白皮书 V1.0》，深度拆解食物 AI 智能体的 C 端增长机会与落地路线。
+                本报告基于《"吃什么吃" AI智能体 · 产品方案白皮书 V1.0》，从产品逻辑、竞争格局、商业模式、技术架构四个维度进行深度拆解。核心论点：<strong>对话式AI+拍照输入是饮食管理App的交互范式跃迁；真正的竞争壁垒不在AI能力，而在垂直数据深度与不可复制的商业立场。</strong>
             </p>
             <div class="mt-8 flex flex-wrap gap-4">
                 <a href="#app-demo" class="bg-brand text-white px-8 py-3.5 rounded-full font-bold hover-bg-brand transition shadow-lg shadow-emerald-600/10">
                     调试 V1.0 原型沙盒
                 </a>
-                <a href="#competitors" class="border border-brand text-brand px-8 py-3.5 rounded-full font-bold hover:bg-emerald-50 transition">
-                    对比全球竞品 (薄荷/Asken/Foodvisor)
+                <a href="#deep-competition" class="border border-brand text-brand px-8 py-3.5 rounded-full font-bold hover:bg-emerald-50 transition">
+                    竞争格局深度分析 ↓
                 </a>
             </div>
         </div>
         <div class="lg:col-span-5 flex justify-center">
-            <!-- 手机样机静态示意图 -->
             <div class="w-[300px] h-[580px] bg-black rounded-[40px] p-3 shadow-2xl border-4 border-gray-800 relative">
                 <div class="absolute top-4 left-1/2 -translate-x-1/2 w-32 h-4 bg-black rounded-full z-10"></div>
                 <div class="w-full h-full bg-[#F5F5F5] rounded-[32px] overflow-hidden flex flex-col justify-between p-4 relative text-xs">
-                    <!-- 顶栏 -->
                     <div class="flex justify-between items-center pb-2 border-b border-gray-200 mt-2">
-                        <span class="font-bold">👤 档案</span>
+                        <span class="font-bold">≡ 会话</span>
                         <span class="font-bold text-emerald-700">吃什么吃</span>
-                        <span class="text-gray-400">···</span>
+                        <span class="text-gray-400">👤</span>
                     </div>
-                    <!-- 消息流 -->
                     <div class="flex-1 overflow-y-auto space-y-3 py-2">
                         <div class="bubble-ai p-2.5 max-w-[85%] text-[11px]">
                             下午好。你上次拍的那袋菠菜——今天做了吗？🥬
                         </div>
                         <div class="bubble-user p-2.5 max-w-[85%] ml-auto text-[11px] shadow-sm">
-                            📷 [午餐餐盘.jpg] 
+                            📷 [午餐餐盘.jpg]
                         </div>
                         <div class="bg-white border border-emerald-100 rounded-xl p-3 shadow-sm space-y-1.5 max-w-[90%]">
                             <div class="flex justify-between font-bold">
@@ -157,9 +179,11 @@
                             <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
                                 <div class="bg-brand h-full w-[75%]"></div>
                             </div>
+                            <div class="bg-amber-50 text-[10px] text-amber-800 p-1.5 rounded-lg">
+                                💡 <strong>就一件事：</strong>加一份清炒时蔬就85分
+                            </div>
                         </div>
                     </div>
-                    <!-- 输入区 -->
                     <div class="space-y-1">
                         <div class="flex gap-2 items-center">
                             <span class="w-8 h-8 bg-brand rounded-full flex items-center justify-center text-white text-xs">📷</span>
@@ -174,16 +198,16 @@
     </div>
 </header>
 
-<!-- Section 1: 核心战略定位（1x1 颠覆性定位） -->
+<!-- ==================== SECTION 1: 核心战略定位 ==================== -->
 <section id="positioning" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <div class="lg:flex justify-between items-end mb-16">
             <div>
                 <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">1. 战略定位 / STRATEGIC POSITIONING</h2>
-                <p class="text-3xl font-bold text-gray-900">“吃什么吃” 为何能击溃传统饮食 App？</p>
+                <p class="text-3xl font-bold text-gray-900">"吃什么吃" 为何能击溃传统饮食 App？</p>
             </div>
             <p class="text-gray-500 max-w-md lg:mt-0 mt-4 text-sm leading-relaxed">
-                传统工具（如薄荷、Keep）死于“手动输入的繁琐感”。“吃什么吃”通过“一屏一对话”和“拍照即流式输入”对传统多级复杂界面降维打击。
+                传统工具（如薄荷）死于"手动输入的繁琐感"。"吃什么吃"通过"一屏一对话"和"拍照即流式输入"实现交互范式的代际跃迁——这不是改进，是重构。
             </p>
         </div>
 
@@ -192,33 +216,34 @@
                 <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-brand text-2xl font-bold mb-6">🎯</div>
                 <h3 class="text-xl font-bold mb-3">极致降低记录摩擦阻力</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    传统记录一顿饭需要经历：搜索菜名 -> 选择克数 -> 手动加总等多个繁琐环节，平均耗时 <strong>120秒</strong>。而“吃什么吃”通过拍照，将完整的价值闭环压缩至 <strong>10秒内</strong>。
+                    传统记录一顿饭需经历：搜索菜名 → 选择克数 → 手动加总，平均耗时 <strong>120秒</strong>。而"吃什么吃"的核心设计哲学是<strong>打开App即相机</strong>，将完整价值闭环压缩至 <strong>3-10秒</strong>。这是从"命令行"到"图形界面"级别的范式跃迁。
                 </p>
             </div>
             <div class="p-8 rounded-2xl bg-[#F8F9FA] border border-gray-100">
                 <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 text-2xl font-bold mb-6">🧩</div>
                 <h3 class="text-xl font-bold mb-3">场景驱动而非功能堆砌</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    不强迫用户学习复杂的营养学。我们将功能封装成“Skill（技能卡片）”，通过“血糖负荷”、“新鲜度度量”、“热量等价代换”等直接场景，给予用户确定性的行动指南。
+                    不强迫用户学习营养学。将能力封装成"Skill（技能卡片）"，通过直接场景（血糖负荷、新鲜度度量、热量等价代换）给予<strong>"就一件事"级别的行动方案</strong>。对应行为科学中的 BJ Fogg 模型：B = MAP（行为 = 动机 × 能力 × 提示），同时降低了能力门槛并提供了清晰提示。
                 </p>
             </div>
             <div class="p-8 rounded-2xl bg-[#F8F9FA] border border-gray-100">
                 <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 text-2xl font-bold mb-6">⚡</div>
                 <h3 class="text-xl font-bold mb-3">渐进式档案填充 (DDF)</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    杜绝冷启动长表单。用户无需注册即可体验前三次拍照快判。在第四次分析时才提示注册，第十次时引导补充身高体重，实现极高转化。
+                    杜绝冷启动长表单。前3次免注册体验核心快判 → 第4次提示注册 → 第10次引导补充身高体重。参考 Duolingo / TikTok 的渐进式数据采集模式：<strong>先让用户体验核心价值，再逐步索取信息</strong>，大幅提升首次体验完成率。
                 </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 2: 全球用户价值与地缘习惯剖析 -->
+<!-- ==================== SECTION 2: 全球用户价值 ==================== -->
 <section id="user-value" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12">
             <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">2. 用户价值与地缘差异 / USER VALUE & GEOGRAPHY</h2>
             <p class="text-3xl font-bold text-gray-900">三大地缘市场的痛点与 Skill 契合度</p>
+            <p class="text-sm text-gray-500 mt-2">注：当前聚焦中国市场验证PMF，日本与欧美为长期愿景储备</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -227,11 +252,11 @@
                 <div>
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-3xl">🇨🇳</span>
-                        <span class="bg-emerald-50 text-brand text-xs px-2.5 py-1 rounded-full font-bold">高频外卖与复合中餐</span>
+                        <span class="bg-emerald-50 text-brand text-xs px-2.5 py-1 rounded-full font-bold">首发市场 · 高频外卖与复合中餐</span>
                     </div>
                     <h3 class="text-xl font-bold mb-4">中国市场：追求效率、隐形热量极多</h3>
                     <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        中餐多属于混合烹饪（如红烧、煎炸），富含隐形油糖，外卖心智极强。用户核心痛点是希望秒级获知“这顿外卖对我的控糖/减脂目标影响有多大”。
+                        中餐多属混合烹饪（红烧、煎炸、爆炒），富含隐形油糖，外卖心智极强。用户核心痛点：<strong>秒级获知"这顿外卖对我的控糖/减脂目标影响有多大"</strong>。
                     </p>
                     <div class="space-y-3">
                         <div class="flex items-start gap-2 text-xs">
@@ -240,12 +265,16 @@
                         </div>
                         <div class="flex items-start gap-2 text-xs">
                             <span class="text-emerald-600 font-bold">▶ 极简平替建议</span>
-                            <span class="text-gray-400">（“就一件事：加一份清炒时蔬”）</span>
+                            <span class="text-gray-400">（"就一件事：加一份清炒时蔬"）</span>
+                        </div>
+                        <div class="flex items-start gap-2 text-xs">
+                            <span class="text-emerald-600 font-bold">▶ 外卖场景全覆盖</span>
+                            <span class="text-gray-400">（中餐复合菜的视觉识别专项训练）</span>
                         </div>
                     </div>
                 </div>
                 <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-brand font-bold">
-                    💡 V1.0 核心突破点：餐盘快判 + 行动指南
+                    💡 V1.0 核心突破点：餐盘快判 + 去幻觉精准数据 + 行动指南
                 </div>
             </div>
 
@@ -254,16 +283,16 @@
                 <div>
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-3xl">🇯🇵</span>
-                        <span class="bg-amber-50 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold">平衡膳食与高频陪伴</span>
+                        <span class="bg-amber-50 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold">长期愿景 · 平衡膳食与高频陪伴</span>
                     </div>
                     <h3 class="text-xl font-bold mb-4">日本市场：一汁三菜、高信任度与 IP 陪伴</h3>
                     <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        日本国民崇尚精致的“一汁三菜”均衡膳食，但面临微量元素缺乏。同时对注册营养师和虚拟 IP 陪伴有全球最高的信任与粘性。
+                        日本国民崇尚精致的"一汁三菜"均衡膳食，但面临微量元素缺乏问题。同时对注册营养师和虚拟 IP 陪伴有全球最高的信任与粘性度。
                     </p>
                     <div class="space-y-3">
                         <div class="flex items-start gap-2 text-xs">
                             <span class="text-amber-700 font-bold">▶ 拟人化伴走师</span>
-                            <span class="text-gray-400">（类似于 Asken 的“未来さん”式温情反馈）</span>
+                            <span class="text-gray-400">（类似于 Asken 的"未来さん"式温情反馈）</span>
                         </div>
                         <div class="flex items-start gap-2 text-xs">
                             <span class="text-amber-700 font-bold">▶ 每日微量平衡图谱</span>
@@ -272,7 +301,7 @@
                     </div>
                 </div>
                 <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-amber-700 font-bold">
-                    💡 V1.0 核心突破点：温情提醒 + 膳食多样性看板
+                    💡 参考方向：Asken的IP伴走模式值得学习，但需自建日式食物数据库
                 </div>
             </div>
 
@@ -281,11 +310,11 @@
                 <div>
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-3xl">🇺🇸/🇪🇺</span>
-                        <span class="bg-blue-50 text-blue-800 text-xs px-2.5 py-1 rounded-full font-bold">极致Macros量化主义</span>
+                        <span class="bg-blue-50 text-blue-800 text-xs px-2.5 py-1 rounded-full font-bold">长期愿景 · 极致Macros量化主义</span>
                     </div>
                     <h3 class="text-xl font-bold mb-4">欧美市场：精确数值、条形码扫码心智</h3>
                     <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        欧美用户热衷于条形码扫描（UPC Scan），极度关注蛋白质、脂肪、碳水化合物（Macros）的精确克数，常年践行如生酮（Keto）、古法（Paleo）等严苛饮食法。
+                        欧美用户热衷于条形码扫描（UPC Scan），极度关注蛋白质、脂肪、碳水（Macros）的精确克数，常年践行生酮（Keto）、古法（Paleo）等严苛饮食法。
                     </p>
                     <div class="space-y-3">
                         <div class="flex items-start gap-2 text-xs">
@@ -299,19 +328,19 @@
                     </div>
                 </div>
                 <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-blue-800 font-bold">
-                    💡 V1.0 核心突破点：精确 Macros 拆解 + 扫码库集成
+                    💡 参考方向：MyFitnessPal的Macros追踪 + Foodvisor的视觉识别路线
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 3: 全球核心竞品博弈分析 -->
+<!-- ==================== SECTION 3: 全球竞品博弈 ==================== -->
 <section id="competitors" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 text-center">
-            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">3. 全球竞品博弈 / COMPETITIVE ANALYSIS</h2>
-            <p class="text-3xl font-bold text-gray-900">“吃什么吃” vs 行业四大巨头对比</p>
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">3. 直接竞品对比 / DIRECT COMPETITORS</h2>
+            <p class="text-3xl font-bold text-gray-900">"吃什么吃" vs 行业四大垂类巨头</p>
         </div>
 
         <div class="overflow-x-auto rounded-2xl border border-gray-200">
@@ -329,34 +358,42 @@
                 <tbody class="divide-y divide-gray-100 text-sm">
                     <tr>
                         <td class="p-4 font-bold">核心交互形态</td>
-                        <td class="p-4 text-brand font-medium bg-emerald-50/30">极致对话流 + 场景卡片 (极简一屏)</td>
-                        <td class="p-4 text-gray-600">传统繁杂 Tab + 二级 AI 对话窗口</td>
+                        <td class="p-4 text-brand font-medium bg-emerald-50/30"><strong>极致对话流 + 场景卡片 (AI Native 一屏)</strong></td>
+                        <td class="p-4 text-gray-600">传统繁杂 Tab + 二级 AI 对话窗口 (Web 2.0)</td>
                         <td class="p-4 text-gray-600">外卖 App 内部辅助点单助手</td>
                         <td class="p-4 text-gray-600">一汁三菜九宫格日志 + AI 伴走形象</td>
                         <td class="p-4 text-gray-600">图像扫描三维估量 + 饮食追踪日志</td>
                     </tr>
                     <tr>
                         <td class="p-4 font-bold">拍照识别中餐复合菜</td>
-                        <td class="p-4 text-brand font-medium bg-emerald-50/30"><strong>极高 (针对中餐烹饪特化训练)</strong></td>
+                        <td class="p-4 text-brand font-medium bg-emerald-50/30"><strong>极高 (针对中式烹饪特化训练)</strong></td>
                         <td class="p-4 text-gray-600">中等偏高，多需要手动搜索确认</td>
                         <td class="p-4 text-gray-600">偏向商户成品菜，家庭菜识别一般</td>
                         <td class="p-4 text-gray-600">极高 (对日式传统料理精准)</td>
                         <td class="p-4 text-gray-600">低 (对中式炒菜等隐性油脂无能为力)</td>
                     </tr>
                     <tr>
-                        <td class="p-4 font-bold">闭环交易潜力</td>
-                        <td class="p-4 text-brand font-medium bg-emerald-50/30">高 (V3.0智慧厨房生态闭环+自有商城)</td>
-                        <td class="p-4 text-gray-600">中等 (偏向自营 DTC 保健品零售)</td>
-                        <td class="p-4 text-emerald-600 font-medium">极高 (直接打通美团外卖即时交易)</td>
-                        <td class="p-4 text-gray-600">极低 (纯工具与健康咨询变现)</td>
-                        <td class="p-4 text-gray-600">低 (纯 C 端工具订阅制)</td>
+                        <td class="p-4 font-bold">数据可信度</td>
+                        <td class="p-4 text-brand font-medium bg-emerald-50/30"><strong>权威数据库+去幻觉架构，100%确定</strong></td>
+                        <td class="p-4 text-gray-600">较高，自有数据库但用户输入依赖大</td>
+                        <td class="p-4 text-gray-600">中等，菜品数据来自商家而非权威来源</td>
+                        <td class="p-4 text-gray-600">极高，日本食物数据库业界最权威</td>
+                        <td class="p-4 text-gray-600">高，基于 USDA + 欧洲食物数据库</td>
                     </tr>
                     <tr>
-                        <td class="p-4 font-bold">劣势痛点</td>
+                        <td class="p-4 font-bold">商业立场独立性</td>
+                        <td class="p-4 text-brand font-medium bg-emerald-50/30"><strong>不接食品广告·不卖竞价排名</strong></td>
+                        <td class="p-4 text-gray-600">中等，自营DTC保健品存在利益冲突</td>
+                        <td class="p-4 text-red-500 font-medium">低，商业模式与健康建议根本冲突</td>
+                        <td class="p-4 text-gray-600">高，纯订阅制无广告</td>
+                        <td class="p-4 text-gray-600">高，纯订阅制无广告</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">核心弱点</td>
                         <td class="p-4 text-emerald-800 bg-emerald-50/30">需要自建权威食物精细映射库</td>
-                        <td class="p-4 text-gray-600">产品过于臃肿，用户流失摩擦力大</td>
+                        <td class="p-4 text-gray-600">产品过于臃肿，年轻用户持续流失</td>
                         <td class="p-4 text-gray-600">缺乏健康专业立场，利益高度绑定外卖</td>
-                        <td class="p-4 text-gray-600">因食物数据库极重，极难进行全球化扩展</td>
+                        <td class="p-4 text-gray-600">因食物数据库极重，极难全球化扩展</td>
                         <td class="p-4 text-gray-600">算法不适应中日等亚洲非结构化膳食</td>
                     </tr>
                 </tbody>
@@ -365,24 +402,310 @@
 
         <div class="mt-8 bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100 text-xs text-emerald-950">
             <span class="font-bold block mb-1">🎯 错位竞争策略：</span>
-            美团有<strong>交易</strong>但缺乏<strong>健康立场</strong>；薄荷有<strong>数据库</strong>但产品<strong>极度臃肿</strong>。 “吃什么吃” 应坚守”健康领域的极简 AI 对话入口”，利用拍照无感秒算切断用户的输入流失，向上连结 Asken 级别的情感粘性，向下通过智慧厨房硬件生态与自有健康商城完成从决策到交付的价值闭环。
+            美团有<strong>交易</strong>但缺乏<strong>健康立场</strong>；薄荷有<strong>数据库</strong>但产品<strong>极度臃肿</strong>。 "吃什么吃" 应坚守"健康领域的极简 AI 对话入口"，利用拍照无感秒算切断用户的输入流失，向上连结 Asken 级别的情感粘性，向下通过<strong>B2B数据服务+Premium订阅+智慧厨房生态</strong>完成从决策到价值的商业闭环。
         </div>
     </div>
 </section>
 
-<!-- Section 4: 商业变现矩阵 (从工具到金融的演进) -->
-<section id="business" class="py-16 bg-gray-50">
+<!-- ==================== SECTION 3.5: 竞争格局深度分析 ==================== -->
+<section id="deep-competition" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="lg:flex justify-between items-end mb-12">
-            <div>
-                <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">4. 商业价值评估 / BUSINESS VALUATION</h2>
-                <p class="text-3xl font-bold text-gray-900">“吃什么吃” 技能变现三维矩阵</p>
-            </div>
-            <p class="text-gray-500 max-w-sm text-xs leading-relaxed">
-                每个 Skill 都是微型商业模型。我们对 V1.0-V3.0 各大核心技能的用户刚需度、可行性与商业变现潜力进行了气泡图模型测算。
+        <div class="mb-12">
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">3.5 竞争格局深度分析 / COMPETITIVE LANDSCAPE</h2>
+            <p class="text-3xl font-bold text-gray-900">三层竞争模型：真正的威胁不是薄荷</p>
+            <p class="text-sm text-gray-500 mt-2 max-w-2xl">
+                仅将"吃什么吃"与垂类App比较是不完整的。真正的竞争是<strong>谁来成为用户饮食决策的第一触点</strong>。我们需要从三个层级审视竞争格局。
             </p>
         </div>
 
+        <!-- Layer framework -->
+        <div class="bg-white rounded-2xl p-8 border border-gray-200 mb-10">
+            <h3 class="font-bold text-lg mb-6">竞争三层次框架</h3>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+                    <span class="bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shrink-0 mt-0.5">第一层</span>
+                    <div>
+                        <h4 class="font-bold text-sm">直接竞品：垂类饮食App</h4>
+                        <p class="text-xs text-gray-500">薄荷健康、MyFitnessPal、Asken、Foodvisor —— 同一赛道的垂类玩家。这是最容易看到的竞争，但<strong>不是最危险的</strong>。</p>
+                        <p class="text-xs text-brand font-bold mt-1">策略：交互范式代际跃迁（Web 2.0 → AI Native），用下一代产品打上一代产品。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-amber-50 rounded-xl border border-amber-100">
+                    <span class="bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shrink-0 mt-0.5">第二层</span>
+                    <div>
+                        <h4 class="font-bold text-sm">平台巨头：真正的威胁</h4>
+                        <p class="text-xs text-gray-600">字节跳动（抖音/豆包）、美团、腾讯（微信/混元） —— 拥有流量、AI能力、用户数据和交易闭环的超级平台。<strong>这是最需要严肃对待的竞争对手。</strong></p>
+                        <p class="text-xs text-amber-700 font-bold mt-1">策略：不在AI能力上竞争，在垂直数据深度 + 健康信任 + 商业立场上建立不对称优势。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shrink-0 mt-0.5">第三层</span>
+                    <div>
+                        <h4 class="font-bold text-sm">替代性威胁：范式变革者</h4>
+                        <p class="text-xs text-gray-600">AI硬件（Apple Vision Pro/Meta智能眼镜实时食物识别）、GLP-1药物替代饮食管理需求、语音助手饮食能力进化。</p>
+                        <p class="text-xs text-blue-700 font-bold mt-1">策略：持续观察窗口，目前不紧迫但需在产品路线图中保留弹性。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deep dive on platform giants -->
+        <h3 class="font-bold text-lg mb-6">第二层深度拆解：平台巨头的威胁与弱点</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            <!-- 字节 -->
+            <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-gray-900">字节跳动（抖音/豆包）</h4>
+                    <span class="threat-critical text-xs px-2 py-0.5 rounded-full font-bold">威胁等级：最高</span>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-500">流量分发</span><span class="text-red-600 font-bold">7亿DAU零成本触达</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">视觉AI</span><span class="text-red-600 font-bold">世界级图像理解能力</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">本地生活</span><span class="text-amber-600 font-bold">抖音团购/外卖已闭环</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">用户数据</span><span class="text-amber-600 font-bold">美食内容=饮食偏好图谱</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">AI助手</span><span class="text-amber-600 font-bold">豆包已是Top AI助手</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs text-brand font-bold">🛡️ 结构性弱点：</p>
+                    <ul class="text-xs text-gray-500 mt-1 space-y-1">
+                        <li>· 战略优先级：食物AI对字节是"第47件事"，对你是"唯一的事"</li>
+                        <li>· 信任赤字：抖音商业化本质使其<strong>天然不适合承担健康建议</strong></li>
+                        <li>· 组织形态：大公司做垂直场景只能以"功能"而非"产品"出现</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 美团 -->
+            <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-gray-900">美团</h4>
+                    <span class="threat-high text-xs px-2 py-0.5 rounded-full font-bold">威胁等级：高</span>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-500">交易闭环</span><span class="text-red-600 font-bold">外卖+到店即时交易</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">场景覆盖</span><span class="text-amber-600 font-bold">用户点外卖时顺带决策</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">AI能力</span><span class="text-amber-600 font-bold">AI小美点单助手内测中</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">商家数据</span><span class="text-amber-600 font-bold">千万级餐厅菜品数据</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs text-brand font-bold">🛡️ 结构性弱点：</p>
+                    <ul class="text-xs text-gray-500 mt-1 space-y-1">
+                        <li>· <strong>商业模式根本冲突</strong>：美团靠商家竞价排名+订单佣金赚钱</li>
+                        <li>· 推荐少油健康菜=推荐低客单价菜=<strong>伤害商家利益=伤害美团收入</strong></li>
+                        <li>· 用户不会相信"既卖外卖又管健康"的平台</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 腾讯 -->
+            <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-bold text-gray-900">腾讯（微信/混元）</h4>
+                    <span class="threat-medium text-xs px-2 py-0.5 rounded-full font-bold">威胁等级：中</span>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-500">小程序生态</span><span class="text-amber-600 font-bold">零下载成本分发</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">微信AI</span><span class="text-blue-600 font-bold">混元大模型聊天即服务</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">健康布局</span><span class="text-green-600 font-bold">目前毫无饮食健康布局</span></div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs text-brand font-bold">🛡️ 当前态势：</p>
+                    <ul class="text-xs text-gray-500 mt-1 space-y-1">
+                        <li>· 腾讯在健康饮食领域目前为零布局，是最不可预测但也最不确定的威胁</li>
+                        <li>· 小程序生态是所有独立App的潜在竞争渠道</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategy positioning matrix -->
+        <div class="bg-gray-900 text-white rounded-2xl p-8">
+            <h3 class="font-bold text-lg mb-6 text-brand">竞争定位矩阵</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left: visual matrix -->
+                <div>
+                    <div class="text-xs text-gray-400 mb-3 text-center">纵轴：健康信任度 ↑ ｜ 横轴：AI/流量能力 →</div>
+                    <!-- 2x2 Grid Matrix -->
+                    <div class="grid grid-cols-2 rounded-xl overflow-hidden border border-gray-700" style="min-height: 320px;">
+                        <!-- Q2: 高信任 + 低AI能力 -->
+                        <div class="bg-blue-900/30 border-r border-b border-gray-700 p-5 flex flex-col justify-center items-center text-center relative">
+                            <span class="text-[10px] text-gray-500 absolute top-2 left-2">低AI · 高信任</span>
+                            <div class="bg-blue-500/20 border border-blue-400/40 rounded-lg px-3 py-2 text-xs w-full">
+                                <span class="text-blue-300 font-bold">Asken / Foodvisor</span>
+                                <p class="text-[10px] text-blue-200/60 mt-0.5">高信任 · 地理隔离</p>
+                            </div>
+                        </div>
+                        <!-- Q1: 高信任 + 高AI能力 (目标象限) -->
+                        <div class="bg-emerald-900/40 border-b border-gray-700 p-5 flex flex-col justify-center items-center text-center relative">
+                            <span class="text-[10px] text-gray-500 absolute top-2 right-2">高AI · 高信任</span>
+                            <div class="bg-brand/30 border-2 border-brand rounded-lg px-3 py-2 text-xs w-full shadow-lg shadow-emerald-500/10">
+                                <span class="text-brand font-bold text-sm">★ 吃什么吃</span>
+                                <p class="text-[10px] text-emerald-200/70 mt-0.5">目标位置：垂直AI + 信任壁垒</p>
+                            </div>
+                            <!-- Arrow pointing to this quadrant -->
+                            <div class="absolute -top-1 right-1/4 text-brand text-lg">🎯</div>
+                        </div>
+                        <!-- Q3: 低信任 + 低AI能力 -->
+                        <div class="bg-gray-800/80 border-r border-gray-700 p-5 flex flex-col justify-center items-center text-center relative">
+                            <span class="text-[10px] text-gray-500 absolute bottom-2 left-2">低AI · 低信任</span>
+                            <div class="bg-amber-500/15 border border-amber-400/30 rounded-lg px-3 py-2 text-xs w-full">
+                                <span class="text-amber-300 font-bold">传统饮食App</span>
+                                <p class="text-[10px] text-amber-200/50 mt-0.5">无AI · 无信任积累</p>
+                            </div>
+                        </div>
+                        <!-- Q4: 低信任 + 高AI能力 (最大威胁象限) -->
+                        <div class="bg-red-900/25 p-5 flex flex-col justify-center items-center text-center relative">
+                            <span class="text-[10px] text-gray-500 absolute bottom-2 right-2">高AI · 低信任</span>
+                            <div class="bg-red-500/20 border border-red-400/40 rounded-lg px-3 py-2 text-xs w-full">
+                                <span class="text-red-300 font-bold">字节 / 美团</span>
+                                <p class="text-[10px] text-red-200/60 mt-0.5">高能力 · 低信任</p>
+                            </div>
+                            <span class="text-[9px] text-red-400 mt-1.5">⚠️ 最大威胁来源</span>
+                        </div>
+                    </div>
+                    <!-- Axis arrows -->
+                    <div class="flex justify-between text-[10px] text-gray-500 mt-1 px-2">
+                        <span>← AI/流量能力低</span>
+                        <span>AI/流量能力高 →</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] text-gray-500 mt-3 px-1 flex-col items-center" style="margin-top: -80px; pointer-events: none;">
+                        <span>↑ 信任度高</span>
+                        <span class="mt-20">↓ 信任度低</span>
+                    </div>
+                </div>
+                <!-- Right: strategy -->
+                <div class="space-y-4 text-sm">
+                    <h4 class="font-bold text-white">🎯 核心竞争策略</h4>
+                    <div class="space-y-3">
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <span class="text-brand font-bold">1. 不在AI能力上与字节竞争</span>
+                            <p class="text-xs text-gray-400 mt-1">在垂直数据深度和健康信任上建立不对称优势。字节不会为一个功能建立3000+子类训练数据库。</p>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <span class="text-brand font-bold">2. 让"不接广告"成为可验证的事实</span>
+                            <p class="text-xs text-gray-400 mt-1">公开算法逻辑、与三甲医院营养科联合发表研究、完成医疗器械认证——把营销文案变成竞争壁垒。</p>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <span class="text-brand font-bold">3. 将SFOOD数据库变成行业标准</span>
+                            <p class="text-xs text-gray-400 mt-1">开放API、参与制定"中式食物AI识别"行业标准、发表论文——成为基础设施而非一个App。</p>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <span class="text-brand font-bold">4. 时间窗口内建立不可逆优势</span>
+                            <p class="text-xs text-gray-400 mt-1">以中国市场为核心，在巨头重视之前完成PMF验证+数据积累+用户迁移成本建设。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SECTION 4: 商业模式三层架构 ==================== -->
+<section id="business" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="lg:flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">4. 商业模式 / BUSINESS MODEL</h2>
+                <p class="text-3xl font-bold text-gray-900">三层商业架构：从C端流量到B2B数据资产</p>
+            </div>
+            <p class="text-gray-500 max-w-sm text-xs leading-relaxed">
+                "吃什么吃"的最优商业模式不是C端订阅，而是<strong>以免费C端产品为数据引擎，驱动B2B数据服务+Premium订阅的双轮模型</strong>。
+            </p>
+        </div>
+
+        <!-- Three-layer model -->
+        <div class="space-y-6 mb-10">
+            <!-- Layer 1: Data -->
+            <div class="layer-data rounded-2xl p-8">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-2xl shrink-0">🏗️</div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">第三层 · 高毛利 · 规模化</span>
+                            <h3 class="font-bold text-lg text-gray-900">B2B 数据服务（利润引擎）</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">这是整个商业模型中被最严重低估的价值层。用户拍照数据的脱敏聚合，可产生多种B2B收入流：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-amber-700">食品消费洞察</span>
+                                <p class="text-gray-500 mt-1">真实场景下的食品消费趋势、地域偏好、品类增长——卖给食品公司、连锁餐厅</p>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-amber-700">健康风险评估</span>
+                                <p class="text-gray-500 mt-1">基于饮食模式的人群健康风险数据——卖给保险公司、体检机构、企业健康福利</p>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-amber-700">零售选品优化</span>
+                                <p class="text-gray-500 mt-1">社区级饮食偏好与食材需求画像——卖给商超、便利店、生鲜电商</p>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-amber-700">公共卫生指数</span>
+                                <p class="text-gray-500 mt-1">城市/区域饮食健康白皮书——卖给政府、公共卫生机构、学术研究</p>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-amber-700 mt-3 font-bold">💡 关键优势：边际成本趋近于零，数据越积累壁垒越高，不受C端用户增长天花板限制</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 2: Subscription -->
+            <div class="layer-subscription rounded-2xl p-8">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-2xl shrink-0">💎</div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">第二层 · 稳定经常性收入</span>
+                            <h3 class="font-bold text-lg text-gray-900">Premium 订阅服务</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">服务重度用户的增值功能，目标5-8%付费转化率：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-emerald-700">深度Skill</span>
+                                <p class="text-gray-500 mt-1">GL血糖连续追踪、定制化饮食方案、AI虚拟营养师无限对话、饮食合规验证</p>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-emerald-700">家庭管理</span>
+                                <p class="text-gray-500 mt-1">家庭多成员管理、儿童营养看板、家庭饮食报告、共享食材库存</p>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-emerald-700">数据服务</span>
+                                <p class="text-gray-500 mt-1">完整历史数据访问、PDF报告导出、数据趋势分析、与可穿戴设备数据同步</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layer 3: Free -->
+            <div class="layer-revenue rounded-2xl p-8">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl shrink-0">🚀</div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">第一层 · 用户/数据入口</span>
+                            <h3 class="font-bold text-lg text-gray-900">免费核心功能（数据引擎）</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">最大化DAU和数据采集，带轻度使用限制（日常够用但不够深入）：</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-blue-700">每日基础分析</span>
+                                <p class="text-gray-500 mt-1">每日N次餐盘快判（N≈5-10）、基础新鲜度检测、每日1次等热量对比</p>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-blue-700">基础记忆</span>
+                                <p class="text-gray-500 mt-1">最近7天对话历史、基础周度饮食总结、核心食材库存追踪</p>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <span class="font-bold text-blue-700">零广告体验</span>
+                                <p class="text-gray-500 mt-1">免费版也零广告——信任不可分级。轻度使用限制而非广告轰炸来驱动转化</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business metrics chart -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div class="chart-container relative" style="height: 380px;">
@@ -390,26 +713,26 @@
                 </div>
             </div>
             <div class="lg:col-span-5 space-y-4">
-                <h4 class="font-bold text-lg text-gray-900">三大变现引擎拆解</h4>
-                <div class="bg-white p-4 rounded-xl border border-emerald-100">
-                    <span class="bg-brand text-white text-[10px] font-bold px-2 py-0.5 rounded-full">高频刚需 · 用户入口</span>
-                    <h5 class="font-bold text-sm mt-2 text-gray-900">拍照餐盘快判 (V1.0)</h5>
+                <h4 class="font-bold text-lg text-gray-900">变现引擎拆解</h4>
+                <div class="bg-white p-4 rounded-xl border border-blue-100">
+                    <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">V1.0 数据蓄水</span>
+                    <h5 class="font-bold text-sm mt-2 text-gray-900">拍照餐盘快判</h5>
                     <p class="text-xs text-gray-500 mt-1">
-                        消除记录摩擦力，快速实现用户的每日高频打开与记录，是系统获取基础健康流量与行为数据的超级底座。
+                        高频刚需，消除记录摩擦，是实现每日打开的超级底座。同时是低成本获取真实世界饮食训练数据的核心引擎。
                     </p>
                 </div>
-                <div class="bg-white p-4 rounded-xl border border-blue-100">
-                    <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">稳定现金流 · 订阅变现</span>
-                    <h5 class="font-bold text-sm mt-2 text-gray-900">多视角伴走与定制档案 (V2.0)</h5>
+                <div class="bg-white p-4 rounded-xl border border-emerald-100">
+                    <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">V2.0 经常性收入</span>
+                    <h5 class="font-bold text-sm mt-2 text-gray-900">Premium订阅 + B2B数据</h5>
                     <p class="text-xs text-gray-500 mt-1">
-                        引入“血糖负荷(GL)”和“家庭孩子营养”等高客单定制化卡片，利用智能记忆和情感陪伴开启 Premium 会员订阅。
+                        GL追踪、虚拟营养师、家庭管理等深度Skill开启付费。同步启动脱敏数据B2B服务。
                     </p>
                 </div>
                 <div class="bg-white p-4 rounded-xl border-amber-200 border bg-amber-50/20">
-                    <span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">生态闭环 · 深度变现</span>
-                    <h5 class="font-bold text-sm mt-2 text-gray-900">智慧厨房生态与自有商城 (V3.0)</h5>
+                    <span class="bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">V3.0 生态利润</span>
+                    <h5 class="font-bold text-sm mt-2 text-gray-900">AI厨房OS + 推荐引擎</h5>
                     <p class="text-xs text-gray-500 mt-1">
-                        打通AI冰箱、智能厨房秤、AI烤箱等智慧厨房设备，构建居家食物健康智能体。通过自有商城实现健康食品与厨房硬件的深度变现，配合深度Skill订阅完成商业闭环。
+                        不造硬件，做智能厨房的"AI操作系统"——与家电厂商合作，让设备接入"吃什么吃"的AI大脑。健康食品CPS推荐引擎（非自有商城）。
                     </p>
                 </div>
             </div>
@@ -417,198 +740,581 @@
     </div>
 </section>
 
-<!-- Section 5: 底层技术方案与 LLM 幻觉治理 -->
-<section id="feasilibility" class="py-16 bg-white">
+<!-- ==================== SECTION 4.5: 护城河分析 ==================== -->
+<section id="moat" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12">
-            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">5. 底层技术方案 / FEASIBILITY & DE-HALLUCINATION</h2>
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">4.5 护城河分析 / COMPETITIVE MOAT</h2>
+            <p class="text-3xl font-bold text-gray-900">可防御性：巨头为什么不能轻易复制？</p>
+            <p class="text-sm text-gray-500 mt-2 max-w-2xl">
+                任何战略分析最终必须回答一个问题：如果字节跳动决定做一个同类产品，你需要多久会死？以下是护城河的诚实评估。
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="moat-card bg-white rounded-2xl p-8 shadow-sm">
+                <div class="w-10 h-10 bg-emerald-100 text-brand rounded-xl flex items-center justify-center font-bold mb-4">01</div>
+                <h3 class="font-bold text-lg mb-2">健康信任壁垒</h3>
+                <p class="text-xs text-gray-400 mb-3">护城河深度：⭐⭐⭐⭐</p>
+                <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                    "不接食品广告、不卖竞价排名"——这不是营销文案，而是商业模式层面的结构性决策。字节/美团的商业模式决定了它们<strong>不可能</strong>提供无利益冲突的饮食建议。
+                </p>
+                <div class="bg-emerald-50 p-3 rounded-lg text-xs text-emerald-800">
+                    <strong>防御逻辑：</strong>这不是功能差距，是商业模式的根本冲突。巨头无法"部分信任"——用户对健康建议的信任是二元的。
+                </div>
+            </div>
+
+            <div class="moat-card bg-white rounded-2xl p-8 shadow-sm">
+                <div class="w-10 h-10 bg-emerald-100 text-brand rounded-xl flex items-center justify-center font-bold mb-4">02</div>
+                <h3 class="font-bold text-lg mb-2">垂直数据壁垒</h3>
+                <p class="text-xs text-gray-400 mb-3">护城河深度：⭐⭐⭐⭐</p>
+                <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                    SFOOD 3000+中式食物子类数据库 + 权威营养映射——这不是通用视觉AI能解决的。中餐复合烹饪的识别需要专门的训练数据。
+                </p>
+                <div class="bg-emerald-50 p-3 rounded-lg text-xs text-emerald-800">
+                    <strong>防御逻辑：</strong>巨头不会为一个垂类场景建设3000+子类的训练数据库。它们的策略是通用AI覆盖——在食物这个高精度领域天然不够。
+                </div>
+            </div>
+
+            <div class="moat-card bg-white rounded-2xl p-8 shadow-sm">
+                <div class="w-10 h-10 bg-emerald-100 text-brand rounded-xl flex items-center justify-center font-bold mb-4">03</div>
+                <h3 class="font-bold text-lg mb-2">数据飞轮壁垒</h3>
+                <p class="text-xs text-gray-400 mb-3">护城河深度：⭐⭐⭐½</p>
+                <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                    用户拍照 → 训练数据 → 模型更准 → 体验更好 → 更多用户。这是间接网络效应——弱于社交网络的直接网络效应，但随时间持续强化。
+                </p>
+                <div class="bg-emerald-50 p-3 rounded-lg text-xs text-emerald-800">
+                    <strong>防御逻辑：</strong>巨头可以复制功能，但无法复制已积累的千万级真实场景训练数据。时间是最不可逾越的壁垒。
+                </div>
+            </div>
+        </div>
+
+        <!-- Honest assessment -->
+        <div class="bg-white rounded-2xl p-8 border border-gray-200">
+            <h3 class="font-bold text-lg mb-4">诚实评估：当前护城河状态</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm">
+                <div class="space-y-3">
+                    <p class="text-gray-600"><strong class="text-red-500">⚠️ 当前弱点：</strong>护城河高度尚不足以完全抵挡巨头。健康信任和数据飞轮都需要时间积累——V1.0阶段是最脆弱的窗口期。</p>
+                    <p class="text-gray-600"><strong class="text-brand">✅ 强化路径：</strong></p>
+                    <ul class="space-y-1 text-xs text-gray-500 ml-4">
+                        <li>· 将SFOOD数据库从私有资产变为行业标准（发表论文、制定标准、开放API）</li>
+                        <li>· 建立"饮食信用分"体系——用户长期数据沉淀形成的个人健康画像，迁移成本极高</li>
+                        <li>· 与硬件深度绑定——成为智能厨房设备的"AI操作系统"，让各品牌设备数据汇入平台</li>
+                        <li>· 获取医疗级信任背书——三甲医院合作、二类医疗器械认证、中国营养学会认证</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl text-xs">
+                    <p class="font-bold text-gray-700 mb-2">⚠️ 需要警惕的护城河幻觉：</p>
+                    <ul class="space-y-1.5 text-gray-500">
+                        <li>❌ <strong>"AI能力壁垒"</strong>——大模型能力是通用的，你没有独占的模型优势</li>
+                        <li>❌ <strong>"先发优势"</strong>——在巨头面前，先发优势持续不了几周</li>
+                        <li>❌ <strong>"功能丰富度"</strong>——巨头可以快速复制任何功能</li>
+                        <li>✅ <strong>真正的壁垒 = 独占数据 + 用户信任 + 生态锁定 + 时间积累</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SECTION 4.8: 风险管理矩阵 ==================== -->
+<section id="risks" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12">
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">4.8 风险管理 / RISK MATRIX</h2>
+            <p class="text-3xl font-bold text-gray-900">识别并缓解关键风险</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="risk-critical p-5 rounded-xl">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full">严重 · 高概率</span>
+                    <h4 class="font-bold text-sm">巨头入场竞争</h4>
+                </div>
+                <p class="text-xs text-gray-600">字节/美团/腾讯利用现有AI能力和流量优势推出同类功能，以零边际成本覆盖你的目标用户。</p>
+                <p class="text-xs text-brand font-bold mt-1">缓解：不拼AI能力，拼垂直数据+健康信任+时间壁垒。在巨头重视前完成PMF验证和核心用户沉淀。</p>
+            </div>
+
+            <div class="risk-high p-5 rounded-xl">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full">严重 · 中概率</span>
+                    <h4 class="font-bold text-sm">AI分析错误导致的健康风险与法律责任</h4>
+                </div>
+                <p class="text-xs text-gray-600">食物识别错误→营养数据偏差→用户依据错误建议做出有害健康决策→法律诉讼。</p>
+                <p class="text-xs text-brand font-bold mt-1">缓解：去幻觉架构（数据与LLM解耦）是核心防线。增加免责声明、建立错误反馈机制、获取专业责任保险。</p>
+            </div>
+
+            <div class="risk-high p-5 rounded-xl">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full">严重 · 中概率</span>
+                    <h4 class="font-bold text-sm">"免费"承诺与商业化的结构性矛盾</h4>
+                </div>
+                <p class="text-xs text-gray-600">核心功能免费承诺不可逆，未来推出付费墙时遭遇用户抵制，转化率远低于预期。</p>
+                <p class="text-xs text-brand font-bold mt-1">缓解：V1.0在架构中预留免费/付费边界（feature flag），用"核心免费+深度付费"而非"突然收费"模式。参考Spotify的免费增值模型。</p>
+            </div>
+
+            <div class="risk-medium p-5 rounded-xl">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-0.5 rounded-full">中等 · 中概率</span>
+                    <h4 class="font-bold text-sm">用户隐私与数据合规</h4>
+                </div>
+                <p class="text-xs text-gray-600">食物照片含地理位置/家庭成员等敏感信息；健康数据受《个人信息保护法》严格约束；跨境数据流动受限。</p>
+                <p class="text-xs text-brand font-bold mt-1">缓解：隐私设计（Privacy by Design）、数据最小化原则、用户授权透明化、聘请数据合规顾问。</p>
+            </div>
+
+            <div class="risk-medium p-5 rounded-xl">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-0.5 rounded-full">中等 · 中概率</span>
+                    <h4 class="font-bold text-sm">用户行为改变难度——留存率远低于预期</h4>
+                </div>
+                <p class="text-xs text-gray-600">饮食管理类App的行业平均D30留存仅6-10%。即使交互体验大幅优化，改变用户记录习惯仍是巨大挑战。</p>
+                <p class="text-xs text-brand font-bold mt-1">缓解：设计习惯钩子（Hook Model——触发→行动→可变奖励→投入）、饭点推送、饮食连续记录天数（Streak机制）、周报推送。</p>
+            </div>
+
+            <div class="risk-low p-5 rounded-xl">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">低 · 低概率</span>
+                    <h4 class="font-bold text-sm">GLP-1类药物替代饮食管理需求</h4>
+                </div>
+                <p class="text-xs text-gray-600">司美格鲁肽等GLP-1药物的普及可能从根本上改变用户对饮食管理的需求模式。</p>
+                <p class="text-xs text-brand font-bold mt-1">缓解：短期（3-5年）饮食管理App与药物是互补关系而非替代——用药者仍需饮食管理。长期保持观察。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SECTION 5: 技术方案 ==================== -->
+<section id="feasilibility" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12">
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">5. 底层技术方案 / DE-HALLUCINATION ARCHITECTURE</h2>
             <p class="text-3xl font-bold text-gray-900">确定性数据解耦：消灭 AI 瞎编卡路里</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div class="lg:col-span-6 space-y-6">
                 <p class="text-sm text-gray-600 leading-relaxed">
-                    大模型（LLM）天生具有计算能力不确定与“幻觉”倾向。在涉及生命健康的营养学领域，绝对不能允许大模型直接计算热量。我们必须设计一套 **“确定性解耦架构”**：
+                    大模型（LLM）天生具有计算能力不确定与"幻觉"倾向。在涉及生命健康的营养学领域，<strong>绝对不能允许大模型直接计算热量</strong>。这是整个产品方案中最有技术壁垒价值的设计决策。
                 </p>
-                
+
                 <div class="space-y-4">
                     <div class="flex gap-4 items-start">
-                        <span class="bg-emerald-100 text-brand p-2.5 rounded-lg font-bold text-xs">Step 1</span>
+                        <span class="bg-emerald-100 text-brand p-2.5 rounded-lg font-bold text-xs shrink-0">Step 1</span>
                         <div>
                             <h4 class="font-bold text-sm">视觉标签解离层 (Vision Transformer)</h4>
-                            <p class="text-xs text-gray-500 mt-1">通过多模态视觉大模型将照片中的物理餐盘解离成【菜品标签】与【估算克数】。不涉及卡路里运算。</p>
+                            <p class="text-xs text-gray-500 mt-1">通过多模态视觉大模型将照片中的物理餐盘解离成【菜品标签】与【估算克数】。只做"这是什么、大概多少量"，<strong>不涉及卡路里运算</strong>。</p>
                         </div>
                     </div>
                     <div class="flex gap-4 items-start">
-                        <span class="bg-emerald-100 text-brand p-2.5 rounded-lg font-bold text-xs">Step 2</span>
+                        <span class="bg-emerald-100 text-brand p-2.5 rounded-lg font-bold text-xs shrink-0">Step 2</span>
                         <div>
                             <h4 class="font-bold text-sm">拦截 LLM：确定性映射检索 (D-Query)</h4>
                             <p class="text-xs text-gray-500 mt-1">
-                                将解离出的结构化数据送入静态映射查询器。数据由**中国食物成分表/USDA权威数据库**计算得出，确保卡路里、 Macros 的数值 100% 精确与确定。
+                                将解离出的结构化标签送入静态映射查询器。数据由<strong>中国食物成分表/USDA权威数据库</strong>计算得出，确保卡路里、Macros的数值 100% 精确与确定。LLM在此阶段<strong>完全被绕过</strong>。
                             </p>
                         </div>
                     </div>
                     <div class="flex gap-4 items-start">
-                        <span class="bg-emerald-100 text-brand p-2.5 rounded-lg font-bold text-xs">Step 3</span>
+                        <span class="bg-emerald-100 text-brand p-2.5 rounded-lg font-bold text-xs shrink-0">Step 3</span>
                         <div>
                             <h4 class="font-bold text-sm">LLM 最终语言包装与对话演绎</h4>
-                            <p class="text-xs text-gray-500 mt-1">大模型根据权威数据库返回的精确结果，生成最终极具温度感和行动引导力（“就一件事”）的卡片推荐文本。</p>
+                            <p class="text-xs text-gray-500 mt-1">大模型根据权威数据库返回的<strong>精确结果</strong>，生成最终极具温度感和行动引导力（"就一件事"）的卡片推荐文本。LLM只做它擅长的事——语言生成。</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 架构流程图 -->
             <div class="lg:col-span-6 bg-gray-50 p-8 rounded-3xl border border-gray-100 flex flex-col gap-4 text-xs font-mono">
                 <div class="bg-white p-3 rounded-xl border border-gray-200">
-                    <span class="text-emerald-700 font-bold">[1] 拍照输入:</span> 📷 拍摄一盘 "红烧肉配米饭" 
+                    <span class="text-emerald-700 font-bold">[1] 拍照输入:</span> 📷 拍摄一盘 "红烧肉配米饭"
                 </div>
                 <div class="text-center text-gray-400">⬇️</div>
                 <div class="bg-white p-3 rounded-xl border border-gray-200">
-                    <span class="text-emerald-700 font-bold">[2] Vision Transformer:</span> 识别 {'红烧肉': 150g, '米饭': 200g}
+                    <span class="text-emerald-700 font-bold">[2] Vision Transformer:</span> 识别 {'红烧肉': 150g, '米饭': 200g, '番茄炒蛋': 100g}
                 </div>
                 <div class="text-center text-gray-400">⬇️</div>
-                <div class="bg-amber-100 text-amber-900 p-3 rounded-xl flex justify-between items-center">
+                <div class="bg-red-100 text-red-900 p-3 rounded-xl flex justify-between items-center">
                     <div>
-                        <span class="font-bold">[3] 拦截拦截：禁止 LLM 计算</span><br>
-                        <span class="text-[10px] text-amber-800">避免 AI 随意捏造 680kcal 为 300kcal</span>
+                        <span class="font-bold">[3] ⛔ 拦截：禁止 LLM 计算</span><br>
+                        <span class="text-[10px] text-red-700">避免 AI 随意捏造 680kcal 为 300kcal</span>
                     </div>
                     <span class="text-xl">⛔</span>
                 </div>
                 <div class="text-center text-gray-400">⬇️</div>
                 <div class="bg-emerald-600 text-white p-3 rounded-xl">
                     <span class="font-bold">[4] 权威食物成分库 SQL/RAG 映射:</span> <br>
-                    - 红烧肉 150g ➡ 717 kcal (库 ID: 1245)<br>
-                    - 米饭 200g ➡ 232 kcal (库 ID: 4101)
+                    - 红烧肉 150g ➡ 717 kcal (库 ID: 1245，源自中国食物成分表)<br>
+                    - 米饭 200g ➡ 232 kcal (库 ID: 4101)<br>
+                    - 番茄炒蛋 100g ➡ 178 kcal (库 ID: 3821)
                 </div>
                 <div class="text-center text-gray-400">⬇️</div>
                 <div class="bg-white p-3 rounded-xl border border-gray-200">
                     <span class="text-emerald-700 font-bold">[5] LLM 自然语言生成包装:</span> <br>
-                    "75分餐盘！隐形脂肪偏多。就一件事：加份清炒时蔬。"
+                    "75分！这顿红烧肉+番茄炒蛋+米饭，总计约680kcal。隐形脂肪偏高——酱汁和炒蛋用油较重。<strong>就一件事：</strong>下一顿加一份白灼时蔬，轻松到85分。"
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 6: 三步走演进路线图 -->
+<!-- ==================== SECTION 5.5: V1.0 界面信息架构 ==================== -->
+<section id="interface" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12">
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">5.5 V1.0 界面信息架构 / INTERFACE ARCHITECTURE</h2>
+            <p class="text-3xl font-bold text-gray-900">对话流 + 侧边栏 + 用户中心：三种模式各司其职</p>
+            <p class="text-sm text-gray-500 mt-2 max-w-2xl">
+                V1.0以极简对话流为唯一主界面，同时预留侧边栏与用户中心作为低频入口。三种模式互补而非互相替代。
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gradient-to-b from-emerald-50 to-white rounded-2xl p-8 border-2 border-emerald-200">
+                <span class="bg-brand text-white text-[10px] font-bold px-2 py-0.5 rounded-full mb-3 inline-block">Layer 1 · 主界面</span>
+                <h3 class="font-bold text-lg mb-3">对话流</h3>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                    唯一的日常交互界面。所有能力通过自然对话触发，AI生成结构化卡片。卡片点击可展开为固定页面交互的详情页。
+                </p>
+                <div class="space-y-2 text-xs text-gray-500">
+                    <div class="flex items-center gap-2"><span class="text-brand">▸</span> 拍照/文字 → AI分析卡片</div>
+                    <div class="flex items-center gap-2"><span class="text-brand">▸</span> 卡片底部 → "更多视角 ▾" 展开</div>
+                    <div class="flex items-center gap-2"><span class="text-brand">▸</span> 卡片 → 点击进入结构化详情页</div>
+                    <div class="flex items-center gap-2"><span class="text-brand">▸</span> 快捷Skill条 → 一键触发常用能力</div>
+                </div>
+                <p class="text-[10px] text-brand font-bold mt-3">解决"当下这一刻"的决策问题——极快、极简、无摩擦。</p>
+            </div>
+
+            <div class="bg-gradient-to-b from-gray-50 to-white rounded-2xl p-8 border border-gray-200">
+                <span class="bg-gray-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full mb-3 inline-block">侧边栏 · 左上≡</span>
+                <h3 class="font-bold text-lg mb-3">会话与智能体管理</h3>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                    类似豆包的会话列表与智能体切换。管理对话历史，未来承载多智能体入口（减脂教练、家庭营养师、慢病管理师等）。
+                </p>
+                <div class="space-y-2 text-xs text-gray-500">
+                    <div class="flex items-center gap-2"><span class="text-gray-400">▸</span> 搜索对话历史</div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400">▸</span> 智能体列表与切换（当前·未来）</div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400">▸</span> 对话置顶/归档/删除</div>
+                </div>
+                <p class="text-[10px] text-gray-400 font-bold mt-3">解决"我有很多对话/智能体，怎么找"的问题。</p>
+            </div>
+
+            <div class="bg-gradient-to-b from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-200">
+                <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full mb-3 inline-block">用户中心 · 右上👤</span>
+                <h3 class="font-bold text-lg mb-3">健康数据仪表盘</h3>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                    头像点击进入。承载需要结构化展示的健康数据——个人信息、饮食报告、趋势图表、冰箱库存、目标管理等。
+                </p>
+                <div class="space-y-2 text-xs text-gray-500">
+                    <div class="flex items-center gap-2"><span class="text-blue-500">▸</span> 个人信息（身高/体重/目标/过敏原）</div>
+                    <div class="flex items-center gap-2"><span class="text-blue-500">▸</span> 饮食报告（周报/月报/趋势图表）</div>
+                    <div class="flex items-center gap-2"><span class="text-blue-500">▸</span> 饮食历史（日历视图）</div>
+                    <div class="flex items-center gap-2"><span class="text-blue-500">▸</span> 冰箱库存管理 + 数据导出</div>
+                </div>
+                <p class="text-[10px] text-blue-700 font-bold mt-3">解决"我的身体数据、饮食趋势、目标进展如何"的问题。</p>
+            </div>
+        </div>
+
+        <!-- Design philosophy -->
+        <div class="bg-gray-900 text-white rounded-2xl p-8 text-center">
+            <p class="text-lg">
+                <span class="font-bold text-brand">设计哲学：</span>
+                <span>对话流解决</span><span class="font-bold">"当下这一刻"</span><span>的决策——极快、极简、无摩擦；</span>
+                <span>用户中心承载</span><span class="font-bold">"时间维度"</span><span>的认知——清晰、结构化、有洞察。</span>
+                <span class="text-gray-400">两种模式服务不同的用户心智状态，不矛盾。</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SECTION 6: 演进路线 ==================== -->
 <section id="evolution" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2 text-center">6. 演进战略 / PRODUCT EVOLUTION</h2>
-        <p class="text-3xl font-bold text-gray-900 text-center mb-16">“吃什么吃” 走向交易生态的三步走战略</p>
+        <p class="text-3xl font-bold text-gray-900 text-center mb-16">三步走向 AI 饮食决策生态</p>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- 阶段 1 -->
-            <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
+            <!-- V1.0 -->
+            <div class="bg-white p-8 rounded-3xl border border-emerald-200 shadow-sm relative overflow-hidden">
                 <span class="absolute top-4 right-4 text-6xl text-emerald-100/50 font-bold">01</span>
-                <span class="bg-emerald-100 text-brand text-xs font-bold px-2.5 py-1 rounded-full">V1.0 MVP：极致工具化</span>
-                <h3 class="text-xl font-bold mt-4 mb-3">拍照即输入与快判</h3>
+                <span class="bg-emerald-100 text-brand text-xs font-bold px-2.5 py-1 rounded-full">V1.0 MVP</span>
+                <h3 class="text-xl font-bold mt-4 mb-3">极致工具化 · 免费蓄水</h3>
                 <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                    验证“单界面、拍照即发、白底卡片”的极简交互。主打<strong>拍照餐盘快判</strong>和<strong>新鲜度秒估</strong>，消灭一切记录阻力。
+                    验证"一屏对话流 + 拍照即输入 + AI卡片"的极简交互范式。3大核心Skill打磨到极致，3个Beta Skill实验性上线。为Premium和B2B数据服务积累用户和数据基础。
                 </p>
                 <ul class="text-xs space-y-2 text-gray-500 border-t border-gray-100 pt-4">
-                    <li>🎯 核心指标：每日记录次数 / 留存率</li>
-                    <li>💰 商业化探索：暂无，主攻蓄水和算法调优</li>
+                    <li>🎯 北极星：D30留存 ≥ 20%</li>
+                    <li>🎯 核心：用户每周拍照分析 ≥ 5次</li>
+                    <li>🎯 病毒：等热量对比分享率 ≥ 15%</li>
+                    <li>💰 免费蓄水，无商业化</li>
+                    <li>⏱️ 发布：中国市场首发</li>
                 </ul>
             </div>
 
-            <!-- 阶段 2 -->
-            <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
+            <!-- V2.0 -->
+            <div class="bg-white p-8 rounded-3xl border border-amber-200 shadow-sm relative overflow-hidden">
                 <span class="absolute top-4 right-4 text-6xl text-amber-100/50 font-bold">02</span>
-                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">V2.0 Growth：用户粘性</span>
-                <h3 class="text-xl font-bold mt-4 mb-3">多视角记忆与情感伴走</h3>
+                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">V2.0 Growth</span>
+                <h3 class="text-xl font-bold mt-4 mb-3">深度粘性 · 商业启动</h3>
                 <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                    解锁“血糖负荷(GL)”等多视角卡片，引入虚拟情感营养师，建立每周营养追踪，沉淀深度档案。
+                    GL血糖追踪等多视角卡片上线。虚拟AI营养师情感伴走。家庭多成员管理。Premium订阅正式启动。脱敏数据B2B服务开始商业化。
                 </p>
                 <ul class="text-xs space-y-2 text-gray-500 border-t border-gray-100 pt-4">
-                    <li>🎯 核心指标：每周分析频次 / 分享流失率</li>
-                    <li>💰 商业化探索：Premium 深度Skill订阅 + 品牌联名推荐</li>
+                    <li>🎯 核心：付费转化率 ≥ 5%</li>
+                    <li>🎯 核心：周活跃天数 ≥ 5天</li>
+                    <li>💰 Premium订阅 + B2B数据</li>
+                    <li>🤖 多智能体入口开放</li>
+                    <li>🌏 开始日本市场调研</li>
                 </ul>
             </div>
 
-            <!-- 阶段 3 -->
-            <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
+            <!-- V3.0 -->
+            <div class="bg-white p-8 rounded-3xl border border-blue-200 shadow-sm relative overflow-hidden">
                 <span class="absolute top-4 right-4 text-6xl text-blue-100/50 font-bold">03</span>
-                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">V3.0 Ecosystem：智慧厨房生态</span>
-                <h3 class="text-xl font-bold mt-4 mb-3">居家食物健康智能体</h3>
+                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">V3.0 Ecosystem</span>
+                <h3 class="text-xl font-bold mt-4 mb-3">智慧厨房AI OS</h3>
                 <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                    打通AI冰箱、AI智能厨房秤、AI烤箱等智慧厨房设备，形成真正的居家食物健康智能体。AI成为你厨房的大脑——冰箱自动感知食材库存与新鲜度，智能秤以多光谱技术精准测量营养密度，烤箱根据健康目标自动调节烹饪曲线。上线自有健康商城，精选健康食材与厨房硬件，完成从膳食决策、食材采购到健康烹饪的完整家庭闭环。
+                    <strong>不做硬件，做智能厨房的AI操作系统。</strong>与家电厂商合作，让AI冰箱/智能秤/智慧烤箱接入"吃什么吃"AI大脑。健康食品CPS推荐引擎上线。B2B数据服务规模化。
                 </p>
                 <ul class="text-xs space-y-2 text-gray-500 border-t border-gray-100 pt-4">
-                    <li>🎯 核心指标：智慧厨房生态激活设备数 / 自有商城 GMV</li>
-                    <li>💰 商业化探索：深度Skill订阅 + 自有健康商城 + 智慧厨房硬件生态</li>
+                    <li>🎯 核心：生态激活设备数</li>
+                    <li>🎯 核心：CPS推荐GMV</li>
+                    <li>🎯 核心：B2B数据合同ARR</li>
+                    <li>💰 订阅 + 数据 + CPS 三引擎</li>
+                    <li>🌏 全球化扩展窗口</li>
                 </ul>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Section 7: “吃什么吃” V1.0 界面交互沙盒 -->
+<!-- ==================== SECTION 6.5: 免费/付费边界设计 ==================== -->
+<section id="pricing" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12">
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">6.5 免费/付费边界设计 / FREEMIUM BOUNDARY</h2>
+            <p class="text-3xl font-bold text-gray-900">V1.0隐性设计，V2.0显性开放</p>
+            <p class="text-sm text-gray-500 mt-2 max-w-2xl">
+                即使在V1.0全部免费的阶段，也必须在架构中清晰定义免费/付费的能力边界。用feature flag控制，让V2.0的商业化水到渠成而非突然袭击。
+            </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-gray-200">
+            <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                    <tr class="border-b border-gray-200 bg-gray-50">
+                        <th class="p-4 font-bold text-gray-700">功能模块</th>
+                        <th class="p-4 font-bold text-emerald-700 bg-emerald-50/30">免费版 (V1.0起)</th>
+                        <th class="p-4 font-bold text-amber-700 bg-amber-50/30">Premium (V2.0起)</th>
+                        <th class="p-4 font-bold text-gray-500">设计考量</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <tr>
+                        <td class="p-4 font-bold">餐盘快判</td>
+                        <td class="p-4 text-emerald-700 bg-emerald-50/20">每日N次 (N≈5-10)</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">无限次</td>
+                        <td class="p-4 text-xs text-gray-500">N值需数据验证，确保轻度用户够用</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">新鲜度检测</td>
+                        <td class="p-4 text-emerald-700 bg-emerald-50/20">完整功能</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">+ 批量检测 + 库存关联</td>
+                        <td class="p-4 text-xs text-gray-500">基础版不阉割核心价值</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">等热量对比</td>
+                        <td class="p-4 text-emerald-700 bg-emerald-50/20">1次/天 + 分享水印</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">无限次 + 去水印高清图</td>
+                        <td class="p-4 text-xs text-gray-500">分享即病毒传播，水印是免费获客</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">对话历史</td>
+                        <td class="p-4 text-emerald-700 bg-emerald-50/20">最近7天</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">30天/90天/全部</td>
+                        <td class="p-4 text-xs text-gray-500">历史数据是核心迁移成本</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">GL血糖追踪</td>
+                        <td class="p-4 text-gray-400">预览（3次免费）</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">完整连续追踪</td>
+                        <td class="p-4 text-xs text-gray-500">V2.0核心付费功能</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">虚拟营养师</td>
+                        <td class="p-4 text-gray-400">基础问答</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">深度对话 + 情感伴走</td>
+                        <td class="p-4 text-xs text-gray-500">深度对话是付费墙后的核心价值</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">家庭多成员</td>
+                        <td class="p-4 text-gray-400">—</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">最多5名家庭成员</td>
+                        <td class="p-4 text-xs text-gray-500">家庭场景=高LTV</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">数据导出</td>
+                        <td class="p-4 text-gray-400">—</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20">PDF报告 + CSV导出</td>
+                        <td class="p-4 text-xs text-gray-500">数据便携性是信任加分项</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">广告</td>
+                        <td class="p-4 text-emerald-700 bg-emerald-50/20 font-bold">零广告</td>
+                        <td class="p-4 text-amber-700 bg-amber-50/20 font-bold">零广告</td>
+                        <td class="p-4 text-xs text-gray-500">信任不可分级</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100 text-sm">
+            <span class="font-bold text-brand">💡 核心原则：</span>
+            免费体验必须<strong>足够好到让用户留下来，但不至于好到让用户不需要付费</strong>。参考 MyFitnessPal——免费版有广告且功能受限，但核心记录功能完整可用，用户愿意为更好的体验付费。我们比它们更强的点是：<strong>免费版也是零广告。</strong>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SECTION 6.8: V1.0 北极星指标 ==================== -->
+<section id="metrics" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12">
+            <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">6.8 V1.0 北极星指标 / NORTH STAR METRICS</h2>
+            <p class="text-3xl font-bold text-gray-900">PMF是否成立？三个层级回答</p>
+            <p class="text-sm text-gray-500 mt-2 max-w-2xl">
+                V1.0的成败不取决于下载量——取决于是否验证了产品-市场匹配（PMF）。只有以下三个层级的指标同时达标，才证明PMF成立，才应该进入V2.0的规模化阶段。
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white rounded-2xl p-8 border-2 border-emerald-200 shadow-sm">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-2xl font-bold text-brand mb-4">🥇</div>
+                <span class="text-xs text-gray-400">核心指标</span>
+                <h3 class="font-bold text-xl mt-1 mb-3">周活拍照分析次数</h3>
+                <div class="text-4xl font-extrabold text-brand mb-3">≥ 5次/周</div>
+                <p class="text-sm text-gray-500 leading-relaxed mb-3">
+                    每用户每周使用餐盘快判的平均次数。覆盖大部分正餐场景。
+                </p>
+                <div class="bg-emerald-50 rounded-lg p-3 text-xs text-emerald-800">
+                    <strong>为什么是这个数：</strong>一周21餐，≥5次意味着用户至少对1/4的正餐使用了拍照分析。如果达不到，说明产品没有融入用户日常。
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 border-2 border-amber-200 shadow-sm">
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-2xl font-bold text-amber-600 mb-4">🥈</div>
+                <span class="text-xs text-gray-400">留存指标</span>
+                <h3 class="font-bold text-xl mt-1 mb-3">D30 留存率</h3>
+                <div class="text-4xl font-extrabold text-amber-600 mb-3">≥ 20%</div>
+                <p class="text-sm text-gray-500 leading-relaxed mb-3">
+                    首次使用后第30天仍活跃的用户占比。
+                </p>
+                <div class="bg-amber-50 rounded-lg p-3 text-xs text-amber-800">
+                    <strong>为什么是这个数：</strong>行业平均6-10%。20%意味着产品体验有实质性的代际优势。低于15%说明"拍照即答案"的概念没有真正改变用户行为。
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 border-2 border-purple-200 shadow-sm">
+                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl font-bold text-purple-600 mb-4">🥉</div>
+                <span class="text-xs text-gray-400">病毒指标</span>
+                <h3 class="font-bold text-xl mt-1 mb-3">等热量对比分享率</h3>
+                <div class="text-4xl font-extrabold text-purple-600 mb-3">≥ 15%</div>
+                <p class="text-sm text-gray-500 leading-relaxed mb-3">
+                    使用"等热量交换器"后点击分享的用户占比。
+                </p>
+                <div class="bg-purple-50 rounded-lg p-3 text-xs text-purple-800">
+                    <strong>为什么是这个数：</strong>产品自带增长引擎是独立App生存的关键。15%分享率意味着具备自传播能力，可以降低对买量的依赖。
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 text-white rounded-2xl p-8">
+            <h3 class="font-bold text-lg mb-4 text-brand">🚦 PMF 判定矩阵</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
+                <div class="bg-gray-800 p-4 rounded-xl">
+                    <span class="text-red-400 font-bold">🟥 未达PMF：</span>
+                    <span class="text-gray-300">任何一个核心指标不达标 → 继续迭代产品，不进入规模化阶段</span>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-xl">
+                    <span class="text-yellow-400 font-bold">🟨 弱PMF：</span>
+                    <span class="text-gray-300">1-2个指标达标 → 分析未达标指标的根本原因，定向优化后复评</span>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-xl">
+                    <span class="text-brand font-bold">🟩 强PMF：</span>
+                    <span class="text-gray-300">全部三个指标达标 → PMF验证通过，启动V2.0规模化+Premium商业化</span>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-xl">
+                    <span class="text-blue-400 font-bold">🟦 超级PMF：</span>
+                    <span class="text-gray-300">全部超标30%+ → 产品具备成为平台级产品的潜力，加速融资和扩张</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SECTION 7: 交互沙盒 ==================== -->
 <section id="app-demo" class="py-16 bg-gray-900 text-white">
     <div class="max-w-5xl mx-auto px-6">
         <div class="text-center mb-12">
             <h2 class="text-xs font-bold text-brand tracking-widest uppercase mb-2">交互沙盒原型验证 / INTERACTIVE SANDBOX</h2>
-            <p class="text-3xl font-bold">亲自调试 “吃什么吃” V1.0 交互逻辑</p>
-            <p class="text-sm text-gray-400 mt-2">基于 V1.0 交互说明书精心还原，模拟真实的 UI Layer 节奏、思考动效、卡片下方插入更多视角机制</p>
+            <p class="text-3xl font-bold">亲自调试 "吃什么吃" V1.0 交互逻辑</p>
+            <p class="text-sm text-gray-400 mt-2">基于V1.0交互说明书精心还原，模拟真实UI Layer节奏、思考动效、卡片下方插入更多视角机制</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-gray-800 rounded-3xl p-6 border border-gray-700">
-            <!-- 控制面板：触发动作 -->
+            <!-- 控制面板 -->
             <div class="lg:col-span-5 space-y-6">
                 <h3 class="text-lg font-bold border-b border-gray-700 pb-2">模拟器外部控制台</h3>
-                
+
                 <div>
                     <label class="block text-xs text-gray-400 mb-2">1. 模拟拍照 (调起系统相机即发状态)：</label>
                     <div class="grid grid-cols-3 gap-2">
                         <button onclick="simulatePhoto('lunch')" class="bg-emerald-600/20 border border-emerald-500/50 hover:bg-emerald-600 transition p-3 rounded-xl text-left text-xs">
-                            📸 拍一盘午餐餐盘<br><span class="text-[10px] text-gray-400">（红烧肉配饭等）</span>
+                            📸 拍午餐餐盘<br><span class="text-[10px] text-gray-400">（红烧肉配饭等）</span>
                         </button>
                         <button onclick="simulatePhoto('spinach')" class="bg-amber-600/20 border border-amber-500/50 hover:bg-amber-600 transition p-3 rounded-xl text-left text-xs">
-                            📸 拍一把蔫菠菜<br><span class="text-[10px] text-gray-400">（食材新鲜度检测）</span>
+                            📸 拍一把蔫菠菜<br><span class="text-[10px] text-gray-400">（新鲜度检测）</span>
                         </button>
                         <button onclick="simulatePhoto('calorie-compare')" class="bg-purple-600/20 border border-purple-500/50 hover:bg-purple-600 transition p-3 rounded-xl text-left text-xs">
-                            🔄 等热量对比成图<br><span class="text-[10px] text-gray-400">（AI合成等价对比图）</span>
+                            🔄 等热量对比<br><span class="text-[10px] text-gray-400">（AI合成对比图）</span>
                         </button>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs text-gray-400 mb-2">2. 模拟底栏快捷指令点击：</label>
+                    <label class="block text-xs text-gray-400 mb-2">2. 模拟快捷指令：</label>
                     <div class="flex flex-wrap gap-2">
                         <button onclick="simulateChat('今天吃什么')" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg text-xs">🍽️ 今天吃什么</button>
-                        <button onclick="simulateChat('看看冰箱有什么')" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg text-xs">🥚 看看冰箱有什么</button>
+                        <button onclick="simulateChat('看看冰箱有什么')" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg text-xs">🥚 冰箱有什么</button>
                         <button onclick="simulateChat('营养总结')" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg text-xs">📊 营养总结</button>
                     </div>
                 </div>
 
                 <div class="p-4 bg-gray-900/60 rounded-2xl border border-gray-700 space-y-2">
-                    <span class="text-xs font-bold text-brand block">📝 V1.0 核心设计还原度校验：</span>
+                    <span class="text-xs font-bold text-brand block">📝 V1.0 核心设计校验：</span>
                     <ul class="text-[10px] text-gray-400 space-y-1 list-disc list-inside">
-                        <li><strong>Layer 1 主体</strong>：对话消息流是唯一信息载体。</li>
-                        <li><strong>不使用原生 alert</strong>：右上角配备优雅的 Toast 回复提示。</li>
-                        <li><strong>“思考中” 动效</strong>：1.5s - 2s 完美打字机与跳动圆点循环。</li>
-                        <li><strong>更多视角卡片插入</strong>：点击卡片底部的 `更多视角 ▾`，系统会**平滑地直接插在原分析卡片正下方**，不打乱对话顺序，高度符合不弹窗标准。</li>
+                        <li><strong>Layer 1 主体</strong>：对话消息流是唯一信息载体</li>
+                        <li><strong>不用原生alert</strong>：右上角配备优雅Toast提示</li>
+                        <li><strong>"思考中"动效</strong>：1.5s-2s跳动圆点循环</li>
+                        <li><strong>更多视角 ▾</strong>：点击后在原卡片正下方平滑插入</li>
+                        <li><strong>卡片可点</strong>：点击"查看详情→"进入结构化详情页</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- 手机样机模拟器 -->
+            <!-- 手机样机 -->
             <div class="lg:col-span-7 flex justify-center">
                 <div class="w-[330px] h-[640px] bg-black rounded-[48px] p-4 shadow-2xl border-4 border-gray-700 relative text-black">
-                    <!-- 听筒刘海 -->
                     <div class="absolute top-4 left-1/2 -translate-x-1/2 w-32 h-5 bg-black rounded-full z-10"></div>
                     <div class="w-full h-full bg-[#F5F5F5] rounded-[36px] overflow-hidden flex flex-col justify-between p-4 relative">
-                        
-                        <!-- 顶栏 44px -->
+
+                        <!-- 顶栏 -->
                         <div class="flex justify-between items-center pb-2 border-b border-gray-200 mt-3 shrink-0">
-                            <span class="font-bold text-xs cursor-pointer hover:text-emerald-700" onclick="triggerProfileToast()">👤 档案</span>
+                            <span class="font-bold text-xs cursor-pointer hover:text-emerald-700" onclick="triggerProfileToast()">≡ 会话</span>
                             <span class="font-bold text-sm text-emerald-800">吃什么吃</span>
-                            <span class="text-gray-400 text-sm cursor-pointer" onclick="triggerMoreMenuToast()">···</span>
+                            <span class="text-gray-400 text-sm cursor-pointer" onclick="triggerProfileToast()">👤</span>
                         </div>
 
-                        <!-- 对话区域 Layer 1 -->
+                        <!-- 对话区域 -->
                         <div id="chat-stream" class="flex-1 overflow-y-auto space-y-4 py-4 text-xs pr-1">
-                            <!-- 首次欢迎卡片 (3.1节原生复刻) -->
                             <div class="bg-white rounded-2xl p-4 shadow-sm border border-emerald-100 text-center space-y-3">
                                 <span class="text-3xl block">👋</span>
                                 <h4 class="font-bold text-sm text-emerald-800">我是你的食物智能助手</h4>
@@ -617,24 +1323,20 @@
                                     📷 拍一张餐盘试试
                                 </button>
                                 <div class="text-[9px] text-gray-400 pt-1 border-t border-gray-100">
-                                    或者点击快捷指令：<span class="text-brand font-bold">"今天吃什么"</span>
+                                    或者点快捷指令：<span class="text-brand font-bold">"今天吃什么"</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 输入流控制 Layer 2 -->
+                        <!-- 输入流 -->
                         <div class="shrink-0 border-t border-gray-100 pt-2 bg-white -mx-4 px-4 pb-2">
-                            <!-- 快捷指令条 (4.3节动态横轴) -->
                             <div class="flex gap-2 overflow-x-auto pb-2 text-[10px]" style="scrollbar-width: none;">
                                 <button onclick="simulateChat('今天吃什么')" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full shrink-0 font-medium hover:bg-gray-200">🍽️ 今天吃什么</button>
-                                <button onclick="simulateChat('看看冰箱有什么')" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full shrink-0 font-medium hover:bg-gray-200">🥚 看看冰箱有什么</button>
+                                <button onclick="simulateChat('看看冰箱有什么')" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full shrink-0 font-medium hover:bg-gray-200">🥚 看看冰箱</button>
                                 <button onclick="simulateChat('营养总结')" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full shrink-0 font-medium hover:bg-gray-200">📊 营养总结</button>
                             </div>
-                            <!-- 输入框 56px -->
                             <div class="flex gap-2 items-center">
-                                <button onclick="simulatePhoto('lunch')" class="w-10 h-10 bg-brand rounded-full flex items-center justify-center text-white shrink-0 hover-bg-brand shadow-md">
-                                    📷
-                                </button>
+                                <button onclick="simulatePhoto('lunch')" class="w-10 h-10 bg-brand rounded-full flex items-center justify-center text-white shrink-0 hover-bg-brand shadow-md">📷</button>
                                 <input id="chat-input" type="text" placeholder="输入消息或询问我..." class="flex-1 bg-gray-100 border border-gray-200 rounded-full py-2 px-4 text-xs focus:outline-none focus:border-brand">
                                 <button onclick="submitChatInput()" class="text-brand font-bold text-base px-2">➤</button>
                             </div>
@@ -650,60 +1352,45 @@
 <!-- Footer -->
 <footer class="py-16 bg-gray-900 border-t border-gray-800 text-center text-xs text-gray-500">
     <div class="max-w-7xl mx-auto px-6">
-        <p>© 2026 吃什么吃 · 食方科技产品团队</p>
-        <p class="mt-2 text-gray-600">基于对话式食物 AI 智能体 UI/UX 规范设计体系</p>
+        <p>© 2026 吃什么吃 · 食方科技产品团队 · 战略研判小组出品</p>
+        <p class="mt-2 text-gray-600">基于对话式食物 AI 智能体 UI/UX 规范设计体系 · 本报告包含商业机密，请勿外传</p>
     </div>
 </footer>
 
-<!-- JavaScript 安全初始化与托管脚本 -->
+<!-- JavaScript -->
 <script>
-    // 定义顶层全局引用 (彻底避免 temporal dead zone 和 ReferenceError)
     let streamElement = null;
     let businessBubbleChart = null;
 
-    // Toast 消息队列及弹出机制 (代替原生 alert)
     function showToast(message, type = 'info') {
         const container = document.getElementById('toast-container');
         if (!container) return;
-        
+
         const toast = document.createElement('div');
         toast.className = `transform translate-y-4 opacity-0 transition-all duration-300 ease-out p-3 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 max-w-xs ${
             type === 'success' ? 'bg-emerald-600 text-white' :
             type === 'warning' ? 'bg-amber-500 text-white' :
             'bg-gray-800 text-white'
         }`;
-        
+
         toast.innerHTML = `<span>💡</span> <span>${message}</span>`;
         container.appendChild(toast);
-        
-        // 激活动画
-        setTimeout(() => {
-            toast.classList.remove('translate-y-4', 'opacity-0');
-        }, 10);
-        
-        // 自动淡出移除
+
+        setTimeout(() => { toast.classList.remove('translate-y-4', 'opacity-0'); }, 10);
+
         setTimeout(() => {
             toast.classList.add('opacity-0', 'translate-y-2');
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
 
-    // 档案快捷点击提示
     function triggerProfileToast() {
-        showToast("正在前往健康档案页：可编辑身高(178cm)、目标(减糖)等配置", "success");
+        showToast("用户中心：个人信息、饮食报告、健康仪表盘、冰箱库存管理", "success");
     }
 
-    // 更多菜单点击提示
-    function triggerMoreMenuToast() {
-        showToast("展开选项：支持清空对话流、帮助、导出膳食日志数据", "info");
-    }
-
-    // 统一安全加载入口 (彻底修复 Chart/stream is not defined 报错)
     window.addEventListener('load', function() {
-        // 1. 初始化 DOM 引用
         streamElement = document.getElementById('chat-stream');
-        
-        // 2. 渲染 Chart.js 矩阵图 (确保 Chart 资源就绪后再挂载)
+
         const ctxBubbleElement = document.getElementById('businessBubbleChart');
         if (ctxBubbleElement && typeof Chart !== 'undefined') {
             const ctxBubble = ctxBubbleElement.getContext('2d');
@@ -712,29 +1399,29 @@
                 data: {
                     datasets: [
                         {
-                            label: '餐盘快判 (V1.0 刚需核心)',
-                            data: [{ x: 5.8, y: 4.2, r: 25 }],
+                            label: '餐盘快判 (V1.0 数据引擎)',
+                            data: [{ x: 5.8, y: 3.5, r: 25 }],
                             backgroundColor: 'rgba(0, 168, 107, 0.85)'
                         },
                         {
-                            label: '新鲜度评估 (V1.0 食材防霉)',
-                            data: [{ x: 4.8, y: 3.5, r: 18 }],
-                            backgroundColor: 'rgba(0, 168, 107, 0.6)'
+                            label: 'B2B数据服务 (V2.0+ 利润引擎)',
+                            data: [{ x: 4.5, y: 6.2, r: 32 }],
+                            backgroundColor: 'rgba(245, 158, 11, 0.85)'
                         },
                         {
-                            label: '智慧厨房生态 (V3.0 硬件+商城生态)',
-                            data: [{ x: 5.5, y: 5.8, r: 35 }],
-                            backgroundColor: 'rgba(255, 107, 53, 0.85)'
+                            label: 'Premium订阅 (V2.0 经常性收入)',
+                            data: [{ x: 5.0, y: 5.0, r: 22 }],
+                            backgroundColor: 'rgba(34, 197, 94, 0.85)'
                         },
                         {
-                            label: '多视角伴走 (V2.0 粘性壁垒)',
-                            data: [{ x: 5.0, y: 4.8, r: 22 }],
-                            backgroundColor: 'rgba(78, 205, 196, 0.85)'
+                            label: '智慧厨房AI OS (V3.0 生态)',
+                            data: [{ x: 4.0, y: 5.5, r: 28 }],
+                            backgroundColor: 'rgba(59, 130, 246, 0.85)'
                         },
                         {
-                            label: '自有健康商城 (V3.0 深度商业闭环)',
-                            data: [{ x: 4.2, y: 5.5, r: 30 }],
-                            backgroundColor: 'rgba(255, 230, 109, 0.85)'
+                            label: '健康食品CPS (V3.0 推荐引擎)',
+                            data: [{ x: 5.2, y: 4.5, r: 20 }],
+                            backgroundColor: 'rgba(139, 92, 246, 0.85)'
                         }
                     ]
                 },
@@ -743,12 +1430,12 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            title: { display: true, text: '用户刚需/触发频率 (Low -> High)', color: '#4b5563', font: { size: 11 } },
+                            title: { display: true, text: '用户触达频率/规模 (Low → High)', color: '#4b5563', font: { size: 11 } },
                             min: 3, max: 7,
                             grid: { color: 'rgba(0,0,0,0.03)' }
                         },
                         y: {
-                            title: { display: true, text: '商业盈利化潜力 (Low -> High)', color: '#4b5563', font: { size: 11 } },
+                            title: { display: true, text: '商业变现潜力 (Low → High)', color: '#4b5563', font: { size: 11 } },
                             min: 2, max: 7,
                             grid: { color: 'rgba(0,0,0,0.03)' }
                         }
@@ -761,11 +1448,8 @@
         }
     });
 
-    // 模拟消息发送逻辑 (保证 streamElement 已加载)
     function appendMessage(sender, type, content) {
-        if (!streamElement) {
-            streamElement = document.getElementById('chat-stream');
-        }
+        if (!streamElement) { streamElement = document.getElementById('chat-stream'); }
         if (!streamElement) return;
 
         const msgDiv = document.createElement('div');
@@ -791,11 +1475,7 @@
         } else if (sender === 'ai-card') {
             msgDiv.className = 'bg-white border border-gray-100 rounded-2xl p-4 shadow-sm space-y-3 max-w-[95%] text-gray-800 transition-all duration-300 transform scale-95 opacity-0';
             msgDiv.innerHTML = content;
-            
-            // 稍后激活动画，展现流畅滑入感
-            setTimeout(() => {
-                msgDiv.classList.remove('scale-95', 'opacity-0');
-            }, 50);
+            setTimeout(() => { msgDiv.classList.remove('scale-95', 'opacity-0'); }, 50);
         } else if (sender === 'thinking') {
             msgDiv.id = 'thinking-indicator';
             msgDiv.className = 'bubble-ai p-3 max-w-[80%] text-gray-500 flex flex-col gap-1';
@@ -808,7 +1488,7 @@
                 <span class="text-[9px] text-gray-400">正在分析，食物有点复杂...</span>
             `;
         }
-        
+
         streamElement.appendChild(msgDiv);
         streamElement.scrollTop = streamElement.scrollHeight;
     }
@@ -823,11 +1503,10 @@
         return `${d.getHours()}:${d.getMinutes().toString().padStart(2, '0')}`;
     }
 
-    // 模拟拍照输入
     function simulatePhoto(imgType) {
         appendMessage('user', 'image', imgType);
         appendMessage('thinking', 'status', '');
-        
+
         setTimeout(() => {
             removeThinking();
             if (imgType === 'lunch') {
@@ -854,13 +1533,13 @@
                         </div>
                         <div class="bg-amber-50 p-2 rounded-lg text-[10px] text-amber-900 border border-amber-100 space-y-1">
                             <div>⚠️ <strong>隐形脂肪警告</strong>：酱汁和番茄炒蛋用油较重，隐形油脂多。</div>
-                            <div>💡 <strong>行动方案</strong>：加一份白灼蔬菜，去油解腻。</div>
+                            <div>💡 <strong>就一件事：</strong>加一份白灼蔬菜，去油解腻。</div>
                         </div>
                     </div>
                     <div class="flex justify-between border-t border-gray-100 pt-3 text-[10px] text-gray-500">
                         <button onclick="expandMoreViews(this)" class="text-brand underline font-bold">更多视角 ▾</button>
                         <span class="cursor-pointer" onclick="showToast('已生成分享卡片图，可直接长按复制', 'success')">[ 分享 ]</span>
-                        <span class="cursor-pointer" onclick="showToast('开启深度膳食问答中...', 'info')">[ 追问 ]</span>
+                        <span class="cursor-pointer" onclick="showToast('进入结构化详情页：完整营养拆解+趋势图表', 'success')">[ 查看详情 → ]</span>
                     </div>
                 `;
                 appendMessage('ai-card', 'card', cardContent);
@@ -884,7 +1563,7 @@
                             <div>⚠️ 叶片边缘失水蔫软</div>
                         </div>
                         <div class="bg-emerald-50 p-2 rounded-lg text-[10px] text-emerald-900 border border-emerald-100">
-                            🍳 <strong>推荐做法</strong>：推荐今晚或明早必须吃掉，大火蒜蓉快炒。切勿冷冻。
+                            🍳 <strong>推荐做法</strong>：今晚或明早必须吃掉，大火蒜蓉快炒。切勿冷冻。
                         </div>
                     </div>
                     <div class="flex justify-between border-t border-gray-100 pt-3 text-[10px] text-gray-500">
@@ -931,7 +1610,6 @@
         }, 1500);
     }
 
-    // 在卡片正下方插入视角列表卡片 (完全对应 6.1节规范)
     function expandMoreViews(btn) {
         const cardParent = btn.closest('.bg-white');
         if (!cardParent) return;
@@ -939,7 +1617,7 @@
         const viewListDiv = document.createElement('div');
         viewListDiv.className = 'bg-white border-2 border-dashed border-emerald-200 rounded-2xl p-4 mt-3 space-y-3 text-xs text-gray-800 transition-all duration-300 transform scale-95 opacity-0';
         viewListDiv.innerHTML = `
-            <div class="font-bold text-brand">💡 换个视角评估这餐 (V1.0 多视角切换模型)：</div>
+            <div class="font-bold text-brand">💡 换个视角评估这餐 (V1.0 多视角切换)：</div>
             <div class="space-y-2">
                 <div onclick="simulateGLCard(this)" class="p-2.5 bg-gray-50 hover:bg-emerald-50 rounded-lg cursor-pointer flex justify-between items-center transition">
                     <div>
@@ -948,7 +1626,7 @@
                     </div>
                     <span class="text-brand font-bold">[展开]</span>
                 </div>
-                <div onclick="showToast('等热量更优选择：不吃红烧肉酱饭 = 嚼一大口香煎草饲牛排', 'success')" class="p-2.5 bg-gray-50 hover:bg-emerald-50 rounded-lg cursor-pointer flex justify-between items-center transition">
+                <div onclick="showToast('等热量更优选择：同样的680大卡，可以吃两份牛排套餐', 'success')" class="p-2.5 bg-gray-50 hover:bg-emerald-50 rounded-lg cursor-pointer flex justify-between items-center transition">
                     <div>
                         <div class="font-bold text-gray-900">🥩 等热量替代选择</div>
                         <div class="text-[9px] text-gray-400">同等热量：左边长肉，右边长肌，教你平替</div>
@@ -957,35 +1635,29 @@
                 </div>
             </div>
             <div class="text-[9px] text-gray-400 text-center border-t border-gray-100 pt-2 space-y-1.5">
-                <div>💡 你最近连续 2 次查看了 “血糖负荷”</div>
+                <div>💡 你最近连续 2 次查看了 "血糖负荷"</div>
                 <div class="flex justify-center gap-2">
                     <button class="bg-brand text-white px-3 py-0.5 rounded-full font-bold hover:bg-emerald-700" onclick="showToast('已设为默认拍照视角！下次拍照自动直出血糖图谱', 'success')">设为默认</button>
                     <button class="bg-gray-200 text-gray-700 px-3 py-0.5 rounded-full font-bold hover:bg-gray-300" onclick="showToast('保持默认快判基础视图', 'info')">维持不变</button>
                 </div>
             </div>
         `;
-        
+
         cardParent.after(viewListDiv);
-        
-        // 渲染滑入动画
-        setTimeout(() => {
-            viewListDiv.classList.remove('scale-95', 'opacity-0');
-        }, 50);
+
+        setTimeout(() => { viewListDiv.classList.remove('scale-95', 'opacity-0'); }, 50);
 
         if (streamElement) {
-            setTimeout(() => {
-                streamElement.scrollTop = streamElement.scrollHeight;
-            }, 100);
+            setTimeout(() => { streamElement.scrollTop = streamElement.scrollHeight; }, 100);
         }
-        btn.disabled = true; // 禁止二次重复点按
+        btn.disabled = true;
         btn.classList.add('text-gray-300');
     }
 
-    // 触发血糖负荷卡片
     function simulateGLCard(element) {
         showToast("调取 GL 血糖平缓数据库，加载计算中...", "info");
         appendMessage('thinking', 'status', '');
-        
+
         setTimeout(() => {
             removeThinking();
             const glCard = `
@@ -1024,28 +1696,28 @@
         }, 1200);
     }
 
-    // 模拟指令对话
     function simulateChat(keyword) {
         appendMessage('user', 'text', keyword);
         appendMessage('thinking', 'status', '');
-        
+
         setTimeout(() => {
             removeThinking();
             if (keyword === '今天吃什么') {
                 const card = `
                     <div class="flex justify-between items-center border-b border-gray-100 pb-2">
                         <span class="font-bold text-sm text-brand">🍽️ 今天吃什么智能提案</span>
+                        <span class="beta-badge text-[8px] px-1.5 py-0.5" style="background:linear-gradient(135deg,#8B5CF6,#6366F1);color:white;border-radius:99px;font-weight:700;">BETA</span>
                     </div>
                     <div class="space-y-3 text-xs">
                         <div>
                             <span class="bg-emerald-50 text-brand px-2 py-0.5 rounded font-bold text-[10px]">🌅 早餐</span>
                             <p class="font-bold mt-1">脱脂低糖牛奶燕麦 + 水煮蛋 ×2</p>
-                            <p class="text-[10px] text-gray-400">仅需 5 分钟准备 · 提供蛋白质达 22g</p>
+                            <p class="text-[10px] text-gray-400">仅需5分钟准备 · 提供蛋白质达22g</p>
                         </div>
                         <div>
                             <span class="bg-emerald-50 text-brand px-2 py-0.5 rounded font-bold text-[10px]">🌞 午餐</span>
                             <p class="font-bold mt-1">香煎鸡胸肉配大蒜西兰花</p>
-                            <p class="text-[10px] text-gray-400">建议自制：鸡胸肉配西兰花，15分钟快手菜</p>
+                            <p class="text-[10px] text-gray-400">建议自制：15分钟快手菜 · 高蛋白低碳水</p>
                         </div>
                     </div>
                     <div class="flex gap-2 border-t border-gray-100 pt-3 text-[10px] text-brand">
@@ -1055,22 +1727,21 @@
                 `;
                 appendMessage('ai-card', 'card', card);
             } else if (keyword === '看看冰箱有什么') {
-                appendMessage('ai-text', 'text', '刚才检索了您的食材历史，您的家庭冷藏库现有：<strong>一把嫩菠菜 (今天临期)、一小盒包装豆腐、三颗土鸡蛋</strong>。 建议午餐做个【菠菜豆腐蛋汤】，去油低热。');
+                appendMessage('ai-text', 'text', '刚才检索了您的食材历史，您的家庭冷藏库现有：<strong>一把嫩菠菜 (今天临期)、一小盒包装豆腐、三颗土鸡蛋</strong>。建议午餐做个【菠菜豆腐蛋汤】，去油低热。');
             } else if (keyword === '营养总结') {
-                appendMessage('ai-text', 'text', '📊 <strong>本周膳食微量评测报告：</strong> 过去三天内由于家庭小聚，您的隐形碳水和饱和脂肪略微超标。建议在今明两天晚餐中多摄入高纤维粗纤维，蛋白质摄入量 100% 达标良好。');
+                appendMessage('ai-text', 'text', '📊 <strong>本周膳食微量评测报告：</strong>过去三天内由于家庭小聚，您的隐形碳水和饱和脂肪略微超标。建议在今明两天晚餐中多摄入高纤维粗纤维，蛋白质摄入量 100% 达标良好。<br><br>💡 <a href="#" onclick="showToast(\'进入用户中心→我的饮食报告 查看完整趋势图表\', \'success\')" class="text-brand underline">查看完整周报 →</a>');
             } else {
                 appendMessage('ai-text', 'text', `关于 "${keyword}" 膳食建议已生成：对于这类食物，核心是掌握其隐形油脂的烹饪比例。需要我为您调取对应的平替清单吗？`);
             }
         }, 1200);
     }
 
-    // 输入框输入
     function submitChatInput() {
         const input = document.getElementById('chat-input');
         if (!input) return;
         const text = input.value.trim();
         if (!text) return;
-        
+
         input.value = '';
         simulateChat(text);
     }
